@@ -1,6 +1,0 @@
-D:\Downloads\RussianAICup2017\csharp-cgdk\bin\Debug\csharp-cgdk.exe.config
-D:\Downloads\RussianAICup2017\csharp-cgdk\bin\Debug\csharp-cgdk.exe
-D:\Downloads\RussianAICup2017\csharp-cgdk\bin\Debug\csharp-cgdk.pdb
-D:\Downloads\RussianAICup2017\csharp-cgdk\obj\Debug\csharp-cgdk.csprojResolveAssemblyReference.cache
-D:\Downloads\RussianAICup2017\csharp-cgdk\obj\Debug\csharp-cgdk.exe
-D:\Downloads\RussianAICup2017\csharp-cgdk\obj\Debug\csharp-cgdk.pdb
