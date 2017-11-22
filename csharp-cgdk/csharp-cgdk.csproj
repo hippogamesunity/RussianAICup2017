@@ -93,8 +93,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteProcessClient.cs" />
     <Compile Include="Runner.cs" />
+    <Compile Include="SuperHurricane.cs" />
     <Compile Include="Rush.cs" />
-    <Compile Include="VehicleWrapper.cs" />
+    <Compile Include="Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

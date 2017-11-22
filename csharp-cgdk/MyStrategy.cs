@@ -14,7 +14,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         {
             UpdateUnits(world);
             //Hurricane(world, me);
-            Rush(world, me);
+            //Rush(world, me);
+            SuperHurricane(world, me);
             NuclearStrike(world, me, game);
             ProcessQueue(me, move);
         }
