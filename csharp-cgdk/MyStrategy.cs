@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
-namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
+namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
+{
     public sealed partial class MyStrategy : IStrategy
     {
         private static readonly Dictionary<long, VehicleWrapper> Units = new Dictionary<long, VehicleWrapper>();
         private static readonly List<Move> ActionQueue = new List<Move>();
 
-        //  омментарии
-        // "»значально количество возможных действий стратегии ограничено 12-ю ходами за 60 тиков" (ѕункт 2.6).
-        // ѕо этой причине управление единичными юнитами не представл€етс€ возможным.
-        // «а 60 тиков можно сделать всего 5 операций веделени€ и передвижени€.
-        // ≈сли группа юнитов раздел€етс€ (из-за преп€тствий), это становитс€ проблемой дл€ ее управлени€, ведь координаты дл€ команды move - это смещени€, а не абсолютные значени€.
         public void Move(Player me, World world, Game game, Move move)
         {
             UpdateUnits(world);
-            Hurricane(world, me);
+            //Hurricane(world, me);
+            Rush(world, me);
             NuclearStrike(world, me, game);
             ProcessQueue(me, move);
         }
@@ -52,12 +49,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
                 move.Angle = ActionQueue[0].Angle;
                 move.Right = ActionQueue[0].Right;
                 move.Bottom = ActionQueue[0].Bottom;
+                move.VehicleId = move.VehicleId;
                 move.VehicleType = ActionQueue[0].VehicleType;
                 move.MaxSpeed = ActionQueue[0].MaxSpeed;
                 move.Factor = ActionQueue[0].Factor;
                 move.Group = ActionQueue[0].Group;
-                move.FacilityId = -1;
-                move.VehicleId = -1;
+                move.FacilityId = ActionQueue[0].FacilityId;
                 ActionQueue.RemoveAt(0);
             }
         }
@@ -72,7 +69,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
 
                 foreach (var target in enemyUnits)
                 {
-                    var visors = myUnits.Where(i => GetDistance(i, target) < 0.8 * i.Vehicle.VisionRange).ToList();
+                    var visors = myUnits.Where(i => GetDistance(i, target) < 0.75 * i.Vehicle.VisionRange).ToList();
 
                     if (visors.Count == 0) continue;
                     
@@ -99,7 +96,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
                 if (best.Value > 5000) // Each unit has 100 durability
                 {
                     var target = best.Key;
-                    var visor = myUnits.Where(i => GetDistance(i, target) < 0.8 * i.Vehicle.VisionRange).OrderBy(i => i.X + i.Y).First();
+                    var visor = myUnits.Where(i => GetDistance(i, target) < 0.75 * i.Vehicle.VisionRange).OrderBy(i => i.X + i.Y).First();
 
                     ActionQueue.Add(new Move
                     {
