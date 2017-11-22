@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
