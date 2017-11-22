@@ -4,7 +4,7 @@ using System.Linq;
 using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
-    public sealed class MyStrategy : IStrategy
+    public sealed partial class MyStrategy : IStrategy
     {
         private static readonly Dictionary<long, VehicleWrapper> Units = new Dictionary<long, VehicleWrapper>();
         private static readonly List<Move> ActionQueue = new List<Move>();
@@ -18,12 +18,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
         {
             UpdateUnits(world);
             Hurricane(world, me);
-            //Rush(world, me);
             NuclearStrike(world, me, game);
             ProcessQueue(me, move);
         }
-
-        #region Service
 
         private void UpdateUnits(World world)
         {
@@ -58,97 +55,10 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
                 move.VehicleType = ActionQueue[0].VehicleType;
                 move.MaxSpeed = ActionQueue[0].MaxSpeed;
                 move.Factor = ActionQueue[0].Factor;
+                move.Group = ActionQueue[0].Group;
                 move.FacilityId = -1;
                 move.VehicleId = -1;
                 ActionQueue.RemoveAt(0);
-            }
-        }
-
-        #endregion
-
-        #region Strategies
-
-        private void Hurricane(World world, Player me)
-        {
-            if (world.TickIndex == 0)
-            {
-                for (var i = 0; i < 5; i++)
-                {
-                    var type = (VehicleType)i;
-                    var units = Units.Values.Where(j => j.Type == type && j.PlayerId == me.Id).ToList();
-
-                    SelectAll(type, world);
-                    Move(world.Width / 5 - units.Average(j => j.X), world.Height / 5 - units.Average(j => j.Y));
-                }
-            }
-
-            if (world.TickIndex > world.TickCount / 2)
-            {
-                Rush(world, me);
-                return;
-            }
-
-            if (world.TickIndex == 300)
-            {
-                SelectAll(world);
-                Scale(0.1, world.Width / 5, world.Height / 5);
-            }
-
-            if (world.TickIndex > 360 && world.TickIndex % 120 == 0)
-            {
-                var units = Units.Values.Where(j => j.PlayerId == me.Id).ToList();
-
-                Rotate(Math.PI, units.Average(j => j.X), units.Average(j => j.Y));
-            }
-        }
-
-        private void Rush(World world, Player me)
-        {
-            switch (world.TickIndex % 120)
-            {
-                case 0:
-                    SelectAll(VehicleType.Tank, world);
-                    if (world.TickIndex < 60)
-                    {
-                        Scale(0.1, VehicleType.Tank, me);
-                    }
-                    else
-                    {
-                        MoveAll(VehicleType.Tank, new List<VehicleType> { VehicleType.Ifv, VehicleType.Arrv, VehicleType.Tank, VehicleType.Fighter, VehicleType.Helicopter }, me);
-                    }
-                    break;
-                case 10:
-                    SelectAll(VehicleType.Ifv, world);
-                    if (world.TickIndex < 60)
-                    {
-                        Scale(0.1, VehicleType.Ifv, me);
-                    }
-                    else
-                    {
-                        MoveAll(VehicleType.Ifv, new List<VehicleType> { VehicleType.Helicopter, VehicleType.Fighter, VehicleType.Arrv, VehicleType.Ifv, VehicleType.Tank }, me);
-                    }
-                    break;
-                case 20:
-                    SelectAll(VehicleType.Arrv, world);
-                    if (world.TickIndex < 60)
-                    {
-                        Scale(0.1, VehicleType.Arrv, me);
-                    }
-                    else
-                    {
-                        MoveAll(VehicleType.Arrv, new List<VehicleType> { VehicleType.Ifv, VehicleType.Arrv, VehicleType.Tank, VehicleType.Fighter, VehicleType.Helicopter }, me);
-                    }
-                    break;
-                case 30:
-                case 90:
-                    SelectAll(VehicleType.Helicopter, world);
-                    MoveAll(VehicleType.Helicopter, new List<VehicleType> { VehicleType.Tank, VehicleType.Arrv, VehicleType.Helicopter, VehicleType.Ifv, VehicleType.Fighter }, me);
-                    break;
-                case 40:
-                case 100:
-                    SelectAll(VehicleType.Fighter, world);
-                    MoveAll(VehicleType.Fighter, new List<VehicleType> { VehicleType.Helicopter, VehicleType.Fighter }, me);
-                    break;
             }
         }
 
@@ -201,8 +111,6 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
                 }
             }
         }
-
-        #endregion
 
         #region Helpers
 
@@ -290,37 +198,5 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Vehicle wrapper
-    /// </summary>
-    public class VehicleWrapper
-    {
-        public long Id;
-        public VehicleType Type;
-        public double X;
-        public double Y;
-        public int Durability;
-        public long PlayerId;
-        public Vehicle Vehicle;
-
-        public VehicleWrapper(Vehicle vehicle)
-        {
-            Id = vehicle.Id;
-            Type = vehicle.Type;
-            X = vehicle.X;
-            Y = vehicle.Y;
-            Durability = vehicle.Durability;
-            PlayerId = vehicle.PlayerId;
-            Vehicle = vehicle;
-        }
-
-        public void Update(VehicleUpdate vehicleUpdate)
-        {
-            X = vehicleUpdate.X;
-            Y = vehicleUpdate.Y;
-            Durability = vehicleUpdate.Durability;
-        }
     }
 }
