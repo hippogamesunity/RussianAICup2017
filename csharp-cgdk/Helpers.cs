@@ -8,6 +8,10 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
     {
         public bool Urgent;
         public int WaitForTick;
+        public Func<bool> Condition;
+        public System.Action Callback;
+
+        public bool Ready => Condition == null || Condition();
     }
 
     public class VehicleWrapper

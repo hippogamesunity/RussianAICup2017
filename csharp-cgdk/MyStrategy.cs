@@ -45,9 +45,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             {
                 if (ActionQueue.Any() && me.RemainingActionCooldownTicks == 0)
                 {
-                    var urgent = ActionQueue.FirstOrDefault(i => i.Urgent);
-
-                    if (urgent != null) Execute(urgent, move);
+                    Execute(ActionQueue.First(i => i.Urgent && i.Ready), move);
                 }
 
                 return;
@@ -57,14 +55,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             {
                 for (var i = 0; i < ActionQueue.Count; i++)
                 {
-                    if (ActionQueue[i].Urgent && i > 0 && ActionQueue[0].Action == ActionType.ClearAndSelect)
+                    if (ActionQueue[i].Urgent && ActionQueue[i].Ready && i > 0 && ActionQueue[0].Action == ActionType.ClearAndSelect)
                     {
                         Execute(ActionQueue[i], move);
                         return;
                     }
                 }
 
-                Execute(ActionQueue[0], move);
+                Execute(ActionQueue.First(i => i.Ready), move);
             }
         }
 
@@ -72,6 +70,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         private static void Execute(Action action, Move move)
         {
+            if (action == null) return;
+
             if (action.WaitForTick > 0)
             {
                 _wait = action.WaitForTick;
@@ -92,6 +92,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 move.FacilityId = action.FacilityId;
             }
             
+            if (action.Callback != null) action.Callback();
+
             ActionQueue.Remove(action);
         }
 
