@@ -115,7 +115,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         {
             var enemy = world.GetOpponentPlayer();
 
-            if (enemy.NextNuclearStrikeTickIndex != -1)
+            if (enemy.NextNuclearStrikeTickIndex - world.TickIndex == 29)
             {
                 SelectAll(world);
                 Scale(2, enemy.NextNuclearStrikeX, enemy.NextNuclearStrikeY);
@@ -161,7 +161,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
                 var best = evaluations.OrderBy(i => i.Value).Last();
 
-                if (best.Value > 10000) // Each unit has 100 durability
+                if (best.Value > 5000) // Each unit has 100 durability
                 {
                     var target = best.Key;
                     var visor = myUnits.Where(i => GetDistance(i, target) < 0.85 * i.Vehicle.VisionRange).OrderBy(i => i.X + i.Y).First();
