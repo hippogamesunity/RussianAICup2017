@@ -118,7 +118,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             if (enemy.NextNuclearStrikeTickIndex != -1)
             {
                 SelectAll(world);
-                Scale(10, enemy.NextNuclearStrikeX, enemy.NextNuclearStrikeY);
+                Scale(2, enemy.NextNuclearStrikeX, enemy.NextNuclearStrikeY);
                 WaitTicks(world, enemy.NextNuclearStrikeTickIndex - world.TickIndex + 10);
                 Scale(0.1, me);
                 ActionQueue[ActionQueue.Count - 1].Urgent = true;
@@ -146,9 +146,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                     if (affected.Count <= 50) continue;
 
                     var damageToMe = affected.Where(i => i.PlayerId == me.Id)
-                        .Sum(i => Math.Min(i.Durability, game.MaxTacticalNuclearStrikeDamage * Math.Max(0, game.TacticalNuclearStrikeRadius - GetDistance(i, target))));
+                        .Sum(i => Math.Min(i.Durability, game.MaxTacticalNuclearStrikeDamage * (1 - GetDistance(i, target) / game.TacticalNuclearStrikeRadius)));
                     var damageToEnemy = affected.Where(i => i.PlayerId != me.Id)
-                        .Sum(i => Math.Min(i.Durability, game.MaxTacticalNuclearStrikeDamage * Math.Max(0, game.TacticalNuclearStrikeRadius - GetDistance(i, target))));
+                        .Sum(i => Math.Min(i.Durability, game.MaxTacticalNuclearStrikeDamage * (1 - GetDistance(i, target) / game.TacticalNuclearStrikeRadius)));
                     var efficiency = damageToEnemy - damageToMe;
 
                     if (efficiency > 0)
@@ -161,7 +161,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
                 var best = evaluations.OrderBy(i => i.Value).Last();
 
-                if (best.Value > 5000) // Each unit has 100 durability
+                if (best.Value > 10000) // Each unit has 100 durability
                 {
                     var target = best.Key;
                     var visor = myUnits.Where(i => GetDistance(i, target) < 0.85 * i.Vehicle.VisionRange).OrderBy(i => i.X + i.Y).First();
