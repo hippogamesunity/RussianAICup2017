@@ -6,7 +6,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
     public sealed partial class MyStrategy
     {
-        private readonly int[] _intervals = { 800, -1, -1, -1, -1, -1 };
+        private readonly int[] _intervals = { 920, -1, -1, -1, -1, -1 };
 
         private void Hurricane(World world, Player me)
         {
@@ -17,21 +17,21 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 var middle = Middle(me);
 
                 SelectAll(VehicleType.Tank, world);
-                Scale(GetRandom(1, 1.2) / 300f, middle);
+                Scale(GetRandom(1, 1.1) / 300f, middle);
 
                 SelectAll(VehicleType.Ifv, world);
-                Scale(GetRandom(1, 1.25), middle);
+                Scale(GetRandom(1, 1.1), middle);
 
                 SelectAll(VehicleType.Arrv, world);
-                Scale(GetRandom(1, 1.25), middle);
+                Scale(GetRandom(1, 1.1), middle);
 
                 SelectAll(VehicleType.Helicopter, world);
-                Scale(GetRandom(1, 1.30), middle);
+                Scale(GetRandom(1, 1.1), middle);
 
                 SelectAll(VehicleType.Fighter, world);
-                Scale(GetRandom(1, 1.40), middle);
+                Scale(GetRandom(1, 1.1), middle);
 
-                _intervals[1] = WaitSeconds(world, GetRandom(1, 1.5f));
+                _intervals[1] = WaitSeconds(world, GetRandom(0.5, 1));
             }
 
             if (world.TickIndex == _intervals[1])
@@ -46,14 +46,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 SelectAll(world);
                 Scale(0.1, Middle(me));
 
-                _intervals[3] = WaitSeconds(world, GetRandom(1, 2));
+                _intervals[3] = WaitSeconds(world, GetRandom(1, 1.5));
             }
 
             if (world.TickIndex == _intervals[3])
             {
                 Rotate(world, Middle(me));
 
-                _intervals[4] = WaitSeconds(world, GetRandom(1, 2));
+                _intervals[4] = WaitSeconds(world, GetRandom(1, 1.5));
             }
 
             if (world.TickIndex == _intervals[4])
@@ -61,9 +61,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 var middle = Middle(me);
 
                 SelectAll(VehicleType.Helicopter, world);
-                Scale(GetRandom(1, 1.3), middle);
+                Scale(GetRandom(1, 1.2), middle);
                 SelectAll(VehicleType.Fighter, world);
-                Scale(GetRandom(1, 1.4), middle);
+                Scale(GetRandom(1, 1.2), middle);
 
                 _intervals[5] = WaitSeconds(world, GetRandom(0.5, 1));
             }
@@ -74,14 +74,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
                 if (enemy.Count == 0) return;
 
-                var center = new Position(enemy.Average(i => i.X), enemy.Average(i => i.Y));
-                var target = enemy.Select(i => new Position(i.X, i.Y)).OrderBy(i => i.Distance(center)).First();
-                var direction = target - Middle(me);
+                var middle = Middle(me);
+                var target = enemy.OrderBy(i => middle.Distance(i)).First();
+                var direction = new Position(target.X, target.Y) - Middle(me);
 
                 SelectAll(world);
                 Move(direction.X, direction.Y, 0.3);
 
-                _intervals[0] = WaitSeconds(world, GetRandom(1, 2));
+                _intervals[0] = WaitSeconds(world, GetRandom(2, 4));
             }
         }
 
@@ -108,19 +108,19 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             if (world.TickIndex == 0)
             {
                 SelectAll(world);
-                Scale(0.5f, me);
+                Scale(0.75f, me);
             }
 
-            foreach (var tick in new[] { 60, 120, 180, 240, 300, 360, 420, 480, 540, 600 })
+            foreach (var tick in new[] { 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720 })
             if (world.TickIndex == tick)
             {
                 Rotate(Math.PI, Middle(me));
             }
 
-            foreach (var tick in new[] { 660, 720 })
+            foreach (var tick in new[] { 780, 840 })
             if (world.TickIndex == tick)
             {
-                Scale(0.1f, me);
+                Scale(0.25f, me);
             }
         }
     }

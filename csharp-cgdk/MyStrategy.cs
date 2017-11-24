@@ -9,13 +9,19 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
     {
         private static readonly Dictionary<long, VehicleWrapper> Units = new Dictionary<long, VehicleWrapper>();
         private static readonly List<Action> ActionQueue = new List<Action>();
+        private bool _advantage;
 
         public void Move(Player me, World world, Game game, Move move)
         {
             Global.Update(me, world, game, move);
             UpdateUnits(world);
 
-            if (world.TickIndex < 0)
+            if (!_advantage && world.TickIndex % 60 == 0)
+            {
+                _advantage = Units.Values.Count(i => i.PlayerId == me.Id) > 3 * Units.Values.Count(i => i.PlayerId != me.Id);
+            }
+
+            if (world.TickIndex < 0.75 * world.TickCount && !_advantage)
             {
                 Hurricane(world, me);
             }
@@ -174,18 +180,21 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 if (evaluations.Count == 0) return;
 
                 var best = evaluations.OrderBy(i => i.Value).Last();
-                var threshold = Math.Min(50 * 100, 0.25 * enemyUnits.Sum(i => i.Durability));
+                var threshold = Math.Min(50 * 100, 0.20 * enemyUnits.Sum(i => i.Durability));
 
                 if (best.Value > threshold)
                 {
                     var target = best.Key;
                     var visor = myUnits.Where(i => GetDistance(i, target) < 0.85 * i.Vehicle.VisionRange).OrderBy(i => i.X + i.Y).First();
+                    var affectedEnemies = Units.Values.Where(i => i.PlayerId != me.Id && GetDistance(i, target) < game.TacticalNuclearStrikeRadius).ToList();
+                    var direction = new Position(affectedEnemies.Average(i => i.Direction.X), affectedEnemies.Average(i => i.Direction.Y));
+                    var prediction = new Position(30 * direction.X, 30 * direction.Y);
 
                     ActionQueue.Add(new Action
                     {
                         Action = ActionType.TacticalNuclearStrike,
-                        X = target.X,
-                        Y = target.Y,
+                        X = target.X + prediction.X,
+                        Y = target.Y + prediction.Y,
                         VehicleId = visor.Id,
                         Urgent = true
                     });
@@ -211,28 +220,25 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 }
             }
 
-            if (tick > 60 && Global.World.TickIndex % 40 == 0) // 8 actions = 40 tics
+            if (tick > 60 && Global.World.TickIndex % 50 == 0) // 8 actions = 40 tics
             {
-                if (_iteration % 7 == 6)
+                if (_iteration % 9 > 6)
                 {
                     foreach (VehicleType vehicleType in Enum.GetValues(typeof(VehicleType)))
                     {
                         if (vehicleType == VehicleType.Arrv) continue;
 
                         SelectAll(vehicleType, Global.World);
-                        Scale(0.8, vehicleType, Global.Me);
+                        Scale(0.5, vehicleType, Global.Me);
                     }
                 }
                 else
                 {
                     SelectAll(VehicleType.Tank, Global.World);
-                    MoveAll(VehicleType.Tank, new List<VehicleType> { VehicleType.Ifv, VehicleType.Arrv, VehicleType.Tank, VehicleType.Fighter, VehicleType.Helicopter }, Global.Me);
+                    MoveAll(VehicleType.Tank, new List<VehicleType> { VehicleType.Tank, VehicleType.Ifv, VehicleType.Arrv, VehicleType.Fighter, VehicleType.Helicopter }, Global.Me);
 
                     SelectAll(VehicleType.Ifv, Global.World);
                     MoveAll(VehicleType.Ifv, new List<VehicleType> { VehicleType.Helicopter, VehicleType.Fighter, VehicleType.Arrv, VehicleType.Ifv, VehicleType.Tank }, Global.Me);
-
-                    //SelectAll(VehicleType.Arrv, Global.World);
-                    //MoveAll(VehicleType.Arrv, new List<VehicleType> { VehicleType.Ifv, VehicleType.Arrv, VehicleType.Tank, VehicleType.Fighter, VehicleType.Helicopter }, Global.Me);
 
                     SelectAll(VehicleType.Helicopter, Global.World);
                     MoveAll(VehicleType.Helicopter, new List<VehicleType> { VehicleType.Tank, VehicleType.Arrv, VehicleType.Helicopter, VehicleType.Ifv, VehicleType.Fighter }, Global.Me);
@@ -246,6 +252,16 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                     else
                     {
                         MoveAll(VehicleType.Fighter, new List<VehicleType> { VehicleType.Tank, VehicleType.Ifv, VehicleType.Arrv }, Global.Me, self: true);
+                    }
+
+                    var arrvs = Units.Values.Where(i => i.PlayerId == Global.Me.Id && i.Type == VehicleType.Arrv).ToList();
+
+                    if (arrvs.Any())
+                    {
+                        var pos = new Position(arrvs.Average(i => i.X), arrvs.Average(i => i.Y));
+
+                        SelectAll(VehicleType.Arrv, Global.World);
+                        Move(0.2 * Global.World.Width - pos.X, 0.8 * Global.World.Height - pos.Y);
                     }
                 }
 
@@ -330,11 +346,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 if (targets.Any())
                 {
                     var myCenter = new Position(myUnits.Average(i => i.X), myUnits.Average(i => i.Y));
-                    var target = targets.OrderBy(i => myCenter.Distance(i)).First();
+                    var targetsCenter = new Position(targets.Average(i => i.X), targets.Average(i => i.Y));
+                    var target = targets.OrderBy(i => targetsCenter.Distance(i)).First();
 
                     move.Action = ActionType.Move;
-                    move.X = target.X - myUnits.Average(i => i.X);
-                    move.Y = target.Y - myUnits.Average(i => i.Y);
+                    move.X = target.X - myCenter.X;
+                    move.Y = target.Y - myCenter.Y;
 
                     if (maxSpeed > 0)
                     {

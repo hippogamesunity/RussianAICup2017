@@ -39,6 +39,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         public int Durability;
         public long PlayerId;
         public Vehicle Vehicle;
+        public Position Direction;
 
         public VehicleWrapper(Vehicle vehicle)
         {
@@ -53,6 +54,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         public void Update(VehicleUpdate vehicleUpdate)
         {
+            Direction = new Position(vehicleUpdate.X, vehicleUpdate.Y) - new Position(X, Y);
             X = vehicleUpdate.X;
             Y = vehicleUpdate.Y;
             Durability = vehicleUpdate.Durability;
