@@ -12,8 +12,18 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         public void Move(Player me, World world, Game game, Move move)
         {
+            Global.Update(me, world, game, move);
             UpdateUnits(world);
-            Hurricane(world, me);
+
+            if (world.TickIndex < 0)
+            {
+                Hurricane(world, me);
+            }
+            else
+            {
+                Rush(expand: true);
+            }
+            
             EvadeNuclearStrike(world, me);
             NuclearStrike(world, me, game);
             ProcessQueue(world, me, move);
@@ -45,7 +55,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             {
                 if (ActionQueue.Any() && me.RemainingActionCooldownTicks == 0)
                 {
-                    Execute(ActionQueue.First(i => i.Urgent && i.Ready), move);
+                    Execute(ActionQueue.FirstOrDefault(i => i.Urgent && i.Ready), move);
                 }
 
                 return;
@@ -62,7 +72,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                     }
                 }
 
-                Execute(ActionQueue.First(i => i.Ready), move);
+                Execute(ActionQueue.FirstOrDefault(i => i.Ready), move);
             }
         }
 
@@ -113,6 +123,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             return WaitTicks(world, ticks);
         }
 
+        #region Common strategies
+
         private void EvadeNuclearStrike(World world, Player me)
         {
             var enemy = world.GetOpponentPlayer();
@@ -162,8 +174,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 if (evaluations.Count == 0) return;
 
                 var best = evaluations.OrderBy(i => i.Value).Last();
+                var threshold = Math.Min(50 * 100, 0.25 * enemyUnits.Sum(i => i.Durability));
 
-                if (best.Value > 5000) // Each unit has 100 durability
+                if (best.Value > threshold)
                 {
                     var target = best.Key;
                     var visor = myUnits.Where(i => GetDistance(i, target) < 0.85 * i.Vehicle.VisionRange).OrderBy(i => i.X + i.Y).First();
@@ -179,6 +192,68 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 }
             }
         }
+
+        private int _rushStartedTick = -1;
+        private int _iteration;
+
+        private void Rush(bool expand)
+        {
+            if (_rushStartedTick == -1) _rushStartedTick = Global.World.TickIndex;
+
+            var tick = Global.World.TickIndex - _rushStartedTick;
+
+            if (tick == 0 && expand)
+            {
+                foreach (VehicleType vehicleType in Enum.GetValues(typeof(VehicleType)))
+                {
+                    SelectAll(vehicleType, Global.World);
+                    Scale(2, vehicleType, Global.Me);
+                }
+            }
+
+            if (tick > 60 && Global.World.TickIndex % 40 == 0) // 8 actions = 40 tics
+            {
+                if (_iteration % 7 == 6)
+                {
+                    foreach (VehicleType vehicleType in Enum.GetValues(typeof(VehicleType)))
+                    {
+                        if (vehicleType == VehicleType.Arrv) continue;
+
+                        SelectAll(vehicleType, Global.World);
+                        Scale(0.8, vehicleType, Global.Me);
+                    }
+                }
+                else
+                {
+                    SelectAll(VehicleType.Tank, Global.World);
+                    MoveAll(VehicleType.Tank, new List<VehicleType> { VehicleType.Ifv, VehicleType.Arrv, VehicleType.Tank, VehicleType.Fighter, VehicleType.Helicopter }, Global.Me);
+
+                    SelectAll(VehicleType.Ifv, Global.World);
+                    MoveAll(VehicleType.Ifv, new List<VehicleType> { VehicleType.Helicopter, VehicleType.Fighter, VehicleType.Arrv, VehicleType.Ifv, VehicleType.Tank }, Global.Me);
+
+                    //SelectAll(VehicleType.Arrv, Global.World);
+                    //MoveAll(VehicleType.Arrv, new List<VehicleType> { VehicleType.Ifv, VehicleType.Arrv, VehicleType.Tank, VehicleType.Fighter, VehicleType.Helicopter }, Global.Me);
+
+                    SelectAll(VehicleType.Helicopter, Global.World);
+                    MoveAll(VehicleType.Helicopter, new List<VehicleType> { VehicleType.Tank, VehicleType.Arrv, VehicleType.Helicopter, VehicleType.Ifv, VehicleType.Fighter }, Global.Me);
+
+                    SelectAll(VehicleType.Fighter, Global.World);
+
+                    if (Units.Values.Any(i => i.PlayerId != Global.Me.Id && (i.Type == VehicleType.Helicopter || i.Type == VehicleType.Fighter)))
+                    {
+                        MoveAll(VehicleType.Fighter, new List<VehicleType> { VehicleType.Helicopter, VehicleType.Fighter }, Global.Me);
+                    }
+                    else
+                    {
+                        MoveAll(VehicleType.Fighter, new List<VehicleType> { VehicleType.Tank, VehicleType.Ifv, VehicleType.Arrv }, Global.Me, self: true);
+                    }
+                }
+
+                _iteration++;
+            }
+        }
+
+        #endregion
 
         #region Helpers
 
@@ -200,6 +275,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         private static void Scale(double scale, VehicleType type, Player me)
         {
             var units = Units.Values.Where(i => i.Type == type && i.PlayerId == me.Id).ToList();
+
+            if (units.Count == 0) return;
+
             var move = new Action { Action = ActionType.Scale, Factor = scale, X = units.Average(i => i.X), Y = units.Average(i => i.Y) };
 
             ActionQueue.Add(move);
@@ -251,9 +329,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
                 if (targets.Any())
                 {
+                    var myCenter = new Position(myUnits.Average(i => i.X), myUnits.Average(i => i.Y));
+                    var target = targets.OrderBy(i => myCenter.Distance(i)).First();
+
                     move.Action = ActionType.Move;
-                    move.X = targets.Average(i => i.X) - myUnits.Average(i => i.X);
-                    move.Y = targets.Average(i => i.Y) - myUnits.Average(i => i.Y);
+                    move.X = target.X - myUnits.Average(i => i.X);
+                    move.Y = target.Y - myUnits.Average(i => i.Y);
 
                     if (maxSpeed > 0)
                     {

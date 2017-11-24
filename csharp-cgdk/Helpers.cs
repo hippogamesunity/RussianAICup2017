@@ -4,6 +4,22 @@ using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
+    public static class Global
+    {
+        public static Player Me;
+        public static World World;
+        public static Game Game;
+        public static Move Move;
+
+        public static void Update(Player me, World world, Game game, Move move)
+        {
+            Me = me;
+            World = world;
+            Game = game;
+            Move = move;
+        }
+    }
+
     public class Action : Move
     {
         public bool Urgent;
@@ -60,6 +76,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         {
             var x = X - other.X;
             var y = Y - other.Y;
+
+            return Math.Sqrt(x * x + y * y);
+        }
+
+        public double Distance(VehicleWrapper unit)
+        {
+            var x = X - unit.X;
+            var y = Y - unit.Y;
 
             return Math.Sqrt(x * x + y * y);
         }
