@@ -1,163 +1,32 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
-    public static class Global
-    {
-        public static Player Me;
-        public static World World;
-        public static Game Game;
-        public static Move Move;
+	public class Helpers
+	{
+		
+		private static Position Middle(Player player)
+		{
+			var units = Global.Units.Values.Where(i => i.PlayerId == player.Id).ToList();
 
-        public static void Update(Player me, World world, Game game, Move move)
-        {
-            Me = me;
-            World = world;
-            Game = game;
-            Move = move;
-        }
-    }
+			return new Position(units.Average(i => i.X), units.Average(i => i.Y));
+		}
 
-    public class Action : Move
-    {
-        public bool Urgent;
-        public int WaitForTick;
-        public Func<bool> Condition;
-        public System.Action Callback;
+		private double GetDistance(VehicleWrapper from, VehicleWrapper to)
+		{
+			var x = to.X - from.X;
+			var y = to.Y - from.Y;
 
-        public bool Ready => Condition == null || Condition();
-    }
+			return Math.Sqrt(x * x + y * y);
+		}
 
-    public class VehicleWrapper
-    {
-        public long Id;
-        public VehicleType Type;
-        public double X;
-        public double Y;
-        public int Durability;
-        public long PlayerId;
-        public Vehicle Vehicle;
-        public Position Direction;
-
-        public VehicleWrapper(Vehicle vehicle)
-        {
-            Id = vehicle.Id;
-            Type = vehicle.Type;
-            X = vehicle.X;
-            Y = vehicle.Y;
-            Durability = vehicle.Durability;
-            PlayerId = vehicle.PlayerId;
-            Vehicle = vehicle;
-        }
-
-        public void Update(VehicleUpdate vehicleUpdate)
-        {
-            Direction = new Position(vehicleUpdate.X, vehicleUpdate.Y) - new Position(X, Y);
-            X = vehicleUpdate.X;
-            Y = vehicleUpdate.Y;
-            Durability = vehicleUpdate.Durability;
-        }
-    }
-
-    public class Position
-    {
-        public double X;
-        public double Y;
-
-        public static Position Zero => new Position(0, 0);
-
-        public Position(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public double Distance(Position other)
-        {
-            var x = X - other.X;
-            var y = Y - other.Y;
-
-            return Math.Sqrt(x * x + y * y);
-        }
-
-        public double Distance(VehicleWrapper unit)
-        {
-            var x = X - unit.X;
-            var y = Y - unit.Y;
-
-            return Math.Sqrt(x * x + y * y);
-        }
-
-        public static Position operator +(Position a, Position b)
-        {
-            return new Position(a.X + b.X, a.Y + b.Y);
-        }
-
-        public static Position operator -(Position a, Position b)
-        {
-            return new Position(a.X - b.X, a.Y - b.Y);
-        }
-    }
-
-    public static class CRandom
-    {
-        private static readonly byte[] Buffer = new byte[1024];
-        private static int _bufferOffset = Buffer.Length;
-        private static readonly RNGCryptoServiceProvider CryptoProvider = new RNGCryptoServiceProvider();
-
-        public static int GetRandom()
-        {
-            if (_bufferOffset >= Buffer.Length)
-            {
-                FillBuffer();
-            }
-
-            var val = BitConverter.ToInt32(Buffer, _bufferOffset) & 0x7fffffff;
-
-            _bufferOffset += sizeof(int);
-
-            return val;
-        }
-
-        public static int GetRandom(int maxValue)
-        {
-            return GetRandom() % maxValue;
-        }
-
-        public static int GetRandom(int minValue, int maxValue)
-        {
-            if (maxValue < minValue)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            var range = maxValue - minValue;
-
-            return minValue + GetRandom(range);
-        }
-
-        /// <summary>
-        /// Chance 0-100
-        /// </summary>
-        public static bool Chance(int chance)
-        {
-            return GetRandom(0, 101) < chance;
-        }
-
-        /// <summary>
-        /// Chance 0-1f
-        /// </summary>
-        public static bool Chance(float chance)
-        {
-            return Chance((int)(100 * chance));
-        }
-
-        private static void FillBuffer()
-        {
-            CryptoProvider.GetBytes(Buffer);
-            _bufferOffset = 0;
-        }
-    }
+		private double GetRandom(double min, double max)
+		{
+			return CRandom.GetRandom((int)(min * 1000), (int)(max * 1000)) / 1000d;
+		}
+	}
 }

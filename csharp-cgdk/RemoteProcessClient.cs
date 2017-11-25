@@ -19,7 +19,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
         private readonly BinaryWriter writer;
 
         private Player[] previousPlayers;
-        private Facility[] previousFacilities;
+        private Facility[] previousFacilities; 
         private TerrainType[][] terrainByCellXY;
         private WeatherType[][] weatherByCellXY;
 
@@ -650,7 +650,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
 
         private static void EnsureMessageType(MessageType actualType, MessageType expectedType) {
             if (actualType != expectedType) {
-                throw new ArgumentException($"Received wrong message [actual={actualType}, expected={expectedType}].");
+                throw new ArgumentException("Received wrong message [actual={actualType}, expected={expectedType}].");
             }
         }
 
@@ -787,7 +787,10 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk {
             WriteInt(count);
 
             for (int i = 0; i < count; ++i) {
-                WriteEnum(enums[i]?.ToSByte(null));
+                if ( enums[i] != null )
+                    WriteEnum(Convert.ToSByte( enums[i] ) );
+                else
+                    WriteEnum(null);
             }
         }
 

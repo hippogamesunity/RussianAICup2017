@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
+
+namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
+{
+    /// <summary>
+    /// Низкоуровневый генератор приказов. Лучше вместо него пользоваться методами объектов класса Formation
+    /// </summary>
+    class Command
+    {
+        #region SELECTION
+
+        /// <summary>
+        /// Выделить все объекты заданного типа
+        /// </summary>
+        /// <param name="type"></param>
+        public static void SelectAll(VehicleType type)
+        {
+            Global.ActionQueue.Add( new Action { Action = ActionType.ClearAndSelect, Right = Global.World.Width, Bottom = Global.World.Height, VehicleType = type } );
+        }
+
+        /// <summary>
+        /// Выделить все объекты
+        /// </summary>
+        /// <param name="world"></param>
+		public static void SelectAll()
+        {
+            Global.ActionQueue.Add(new Action { Action = ActionType.ClearAndSelect, Right = Global.World.Width, Bottom = Global.World.Height });
+        }
+
+        #endregion
+
+        #region GROUP
+
+        /// <summary>
+        /// Группировать выделенные юниты 
+        /// </summary>
+        /// <param name="group"></param>
+		public static void Group(int group)
+        {
+            Global.ActionQueue.Add(new Action { Action = ActionType.Assign, Group = group });
+        }
+
+        #endregion
+
+        #region SCALE
+
+        /// <summary>
+        /// Масштабирование относительно точки
+        /// </summary>
+        /// <param name="scale"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+		public static void Scale(double scale, double x, double y, Formation formation = null, int waitDuringTicks = 0)
+        {
+			Global.ActionQueue.Add(new Action { Action = ActionType.Scale, Factor = scale, X = x, Y = y, Formation = formation, WaitDuringTicks = waitDuringTicks });
+        }
+
+		/// <summary>
+		/// Масштабирование относительно точки
+		/// </summary>
+		/// <param name="scale"></param>
+		/// <param name="position"></param>
+		public static void Scale(double scale, Position position, Formation formation = null, int waitDuringTicks = 0)
+        {
+			Scale(scale, position.X, position.Y, formation, waitDuringTicks);
+        }
+
+		/// <summary>
+		/// Масштабирование относительно центра всех юнитов игрока
+		/// </summary>
+		/// <param name="scale"></param>
+		public static void Scale(double scale, Formation formation = null, int waitDuringTicks = 0)
+        {
+			Scale(scale, Global.MyUnits.Average(i => i.X), Global.MyUnits.Average(i => i.Y), formation, waitDuringTicks);
+        }
+
+        #endregion
+
+		#region ROTATE
+
+		/// <summary>
+		/// Поворот вокруг точки на заданный угол
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		private static void Rotate(double angle, double x, double y)
+		{
+			Global.ActionQueue.Add(new Action { Action = ActionType.Rotate, Angle = angle, X = x, Y = y, MaxSpeed = 1, MaxAngularSpeed = 1 });
+		}
+
+		/// <summary>
+		/// Поворот вокруг точки на заданный угол
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		private static void Rotate(double angle, Position position)
+		{
+			Rotate(angle, position.X, position.Y);
+		}
+
+		#endregion
+
+		#region MOVE
+
+		/// <summary>
+		/// Двигаться к точке с заданной скоростью
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="maxSpeed"></param>
+		public static void Move(double x, double y, Formation formation = null, int waitDuringTicks = 0, double maxSpeed = 0)
+		{
+			Global.ActionQueue.Add(new Action { Action = ActionType.Move, X = x, Y = y, MaxSpeed = maxSpeed, Formation = formation, WaitDuringTicks = waitDuringTicks });
+		}
+
+		#endregion
+	}
+}
