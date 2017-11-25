@@ -7,6 +7,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             this.radius = radius;
         }
 
-        public double Radius => radius;
+        public double Radius
+        {
+            get { return radius; }
+        }
     }
 }

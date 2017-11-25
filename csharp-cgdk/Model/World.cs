@@ -46,10 +46,19 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             Array.Copy(facilities, this.facilities, facilities.Length);
         }
 
-        public int TickIndex => tickIndex;
-        public int TickCount => tickCount;
-        public double Width => width;
-        public double Height => height;
+        public int TickIndex{
+            get{ return tickIndex;  }
+        }
+        public int TickCount{
+            get{ return tickCount;  }
+        }
+        public double Width{
+            get{ return width;  }
+        }
+        public double Height
+        {
+            get { return height; }
+        }
 
         public Player[] Players {
             get {

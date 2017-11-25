@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
@@ -53,6 +51,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// Габаритный контейнер, который группа занимает на карте
         /// </summary>
         public Rect Rectangle;
+
+		/// <summary>
+		/// Центр масс группы
+		/// </summary>
+		public Point MassCenter = new Point(0,0);
 
 		/// <summary>
 		/// Плотность группы (кол-во юнитов в кругу ограниченном центром и самым дальним юнитом)
@@ -113,6 +116,10 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			else
 				Units = Global.Units.Values.Where(j => j.Type == Type && j.PlayerId == Global.Me.Id).ToList();
             Rectangle = new Rect(Units);
+			if (Units.Count > 0)
+				MassCenter = new Point(Units.Average(i => i.X), Units.Average(i => i.Y));
+			else
+				MassCenter = Point.Zero;
         }
 
         /// <summary>
@@ -140,12 +147,6 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             // Перемещение группы по заданному вектору. Группа задает расчетное время ( расстояние * константа ) за которое она переместится. Пока это время
             // не истечет, группа не будет получать новых приказов (за исключением urgent)
             Command.Move(x, y, this, tickIndex, MaxSpeed);
-
-            // Изменяется габаритный контейнер группы
-            Rectangle.LeftTop.X += x;
-            Rectangle.LeftTop.Y += y;
-            Rectangle.RightBottom.X += x;
-            Rectangle.RightBottom.Y += y;
         }
 
         /// <summary>
@@ -159,8 +160,17 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			int tickIndex = (int)(dist * 1.5 * value);
 			if ( tickIndex > WaitDuringTicks )
 				tickIndex = WaitDuringTicks;
-            Command.Scale(value, Rectangle.Center.X, Rectangle.Center.Y, this, tickIndex);
+            Command.ScaleRelative(value, this, tickIndex);
         }
+
+		/// <summary>
+		/// Имеются ли в очереди приказы для данной группы. Если имеются новых не добавлять
+		/// </summary>
+		/// <returns></returns>
+		public bool HasOrders()
+		{
+			return Global.ActionQueue.FirstOrDefault(i => i.Formation == this) != null;
+		}
 
 		/// <summary>
 		/// Возвращает команду для выбора текущей группы

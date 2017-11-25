@@ -222,99 +222,99 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             this.tacticalNuclearStrikeDelay = tacticalNuclearStrikeDelay;
         }
 
-        public long RandomSeed => randomSeed;
-        public int TickCount => tickCount;
-        public double WorldWidth => worldWidth;
-        public double WorldHeight => worldHeight;
-        public bool IsFogOfWarEnabled => isFogOfWarEnabled;
-        public int VictoryScore => victoryScore;
-        public int FacilityCaptureScore => facilityCaptureScore;
-        public int VehicleEliminationScore => vehicleEliminationScore;
-        public int ActionDetectionInterval => actionDetectionInterval;
-        public int BaseActionCount => baseActionCount;
-        public int AdditionalActionCountPerControlCenter => additionalActionCountPerControlCenter;
-        public int MaxUnitGroup => maxUnitGroup;
-        public int TerrainWeatherMapColumnCount => terrainWeatherMapColumnCount;
-        public int TerrainWeatherMapRowCount => terrainWeatherMapRowCount;
-        public double PlainTerrainVisionFactor => plainTerrainVisionFactor;
-        public double PlainTerrainStealthFactor => plainTerrainStealthFactor;
-        public double PlainTerrainSpeedFactor => plainTerrainSpeedFactor;
-        public double SwampTerrainVisionFactor => swampTerrainVisionFactor;
-        public double SwampTerrainStealthFactor => swampTerrainStealthFactor;
-        public double SwampTerrainSpeedFactor => swampTerrainSpeedFactor;
-        public double ForestTerrainVisionFactor => forestTerrainVisionFactor;
-        public double ForestTerrainStealthFactor => forestTerrainStealthFactor;
-        public double ForestTerrainSpeedFactor => forestTerrainSpeedFactor;
-        public double ClearWeatherVisionFactor => clearWeatherVisionFactor;
-        public double ClearWeatherStealthFactor => clearWeatherStealthFactor;
-        public double ClearWeatherSpeedFactor => clearWeatherSpeedFactor;
-        public double CloudWeatherVisionFactor => cloudWeatherVisionFactor;
-        public double CloudWeatherStealthFactor => cloudWeatherStealthFactor;
-        public double CloudWeatherSpeedFactor => cloudWeatherSpeedFactor;
-        public double RainWeatherVisionFactor => rainWeatherVisionFactor;
-        public double RainWeatherStealthFactor => rainWeatherStealthFactor;
-        public double RainWeatherSpeedFactor => rainWeatherSpeedFactor;
-        public double VehicleRadius => vehicleRadius;
-        public int TankDurability => tankDurability;
-        public double TankSpeed => tankSpeed;
-        public double TankVisionRange => tankVisionRange;
-        public double TankGroundAttackRange => tankGroundAttackRange;
-        public double TankAerialAttackRange => tankAerialAttackRange;
-        public int TankGroundDamage => tankGroundDamage;
-        public int TankAerialDamage => tankAerialDamage;
-        public int TankGroundDefence => tankGroundDefence;
-        public int TankAerialDefence => tankAerialDefence;
-        public int TankAttackCooldownTicks => tankAttackCooldownTicks;
-        public int TankProductionCost => tankProductionCost;
-        public int IfvDurability => ifvDurability;
-        public double IfvSpeed => ifvSpeed;
-        public double IfvVisionRange => ifvVisionRange;
-        public double IfvGroundAttackRange => ifvGroundAttackRange;
-        public double IfvAerialAttackRange => ifvAerialAttackRange;
-        public int IfvGroundDamage => ifvGroundDamage;
-        public int IfvAerialDamage => ifvAerialDamage;
-        public int IfvGroundDefence => ifvGroundDefence;
-        public int IfvAerialDefence => ifvAerialDefence;
-        public int IfvAttackCooldownTicks => ifvAttackCooldownTicks;
-        public int IfvProductionCost => ifvProductionCost;
-        public int ArrvDurability => arrvDurability;
-        public double ArrvSpeed => arrvSpeed;
-        public double ArrvVisionRange => arrvVisionRange;
-        public int ArrvGroundDefence => arrvGroundDefence;
-        public int ArrvAerialDefence => arrvAerialDefence;
-        public int ArrvProductionCost => arrvProductionCost;
-        public double ArrvRepairRange => arrvRepairRange;
-        public double ArrvRepairSpeed => arrvRepairSpeed;
-        public int HelicopterDurability => helicopterDurability;
-        public double HelicopterSpeed => helicopterSpeed;
-        public double HelicopterVisionRange => helicopterVisionRange;
-        public double HelicopterGroundAttackRange => helicopterGroundAttackRange;
-        public double HelicopterAerialAttackRange => helicopterAerialAttackRange;
-        public int HelicopterGroundDamage => helicopterGroundDamage;
-        public int HelicopterAerialDamage => helicopterAerialDamage;
-        public int HelicopterGroundDefence => helicopterGroundDefence;
-        public int HelicopterAerialDefence => helicopterAerialDefence;
-        public int HelicopterAttackCooldownTicks => helicopterAttackCooldownTicks;
-        public int HelicopterProductionCost => helicopterProductionCost;
-        public int FighterDurability => fighterDurability;
-        public double FighterSpeed => fighterSpeed;
-        public double FighterVisionRange => fighterVisionRange;
-        public double FighterGroundAttackRange => fighterGroundAttackRange;
-        public double FighterAerialAttackRange => fighterAerialAttackRange;
-        public int FighterGroundDamage => fighterGroundDamage;
-        public int FighterAerialDamage => fighterAerialDamage;
-        public int FighterGroundDefence => fighterGroundDefence;
-        public int FighterAerialDefence => fighterAerialDefence;
-        public int FighterAttackCooldownTicks => fighterAttackCooldownTicks;
-        public int FighterProductionCost => fighterProductionCost;
-        public double MaxFacilityCapturePoints => maxFacilityCapturePoints;
-        public double FacilityCapturePointsPerVehiclePerTick => facilityCapturePointsPerVehiclePerTick;
-        public double FacilityWidth => facilityWidth;
-        public double FacilityHeight => facilityHeight;
-        public int BaseTacticalNuclearStrikeCooldown => baseTacticalNuclearStrikeCooldown;
-        public int TacticalNuclearStrikeCooldownDecreasePerControlCenter => tacticalNuclearStrikeCooldownDecreasePerControlCenter;
-        public double MaxTacticalNuclearStrikeDamage => maxTacticalNuclearStrikeDamage;
-        public double TacticalNuclearStrikeRadius => tacticalNuclearStrikeRadius;
-        public int TacticalNuclearStrikeDelay => tacticalNuclearStrikeDelay;
+        public long RandomSeed { get { return randomSeed; } }
+        public int TickCount { get { return tickCount; } }
+        public double WorldWidth { get { return worldWidth; } }
+        public double WorldHeight { get { return worldHeight; } }
+        public bool IsFogOfWarEnabled { get { return isFogOfWarEnabled; } }
+        public int VictoryScore { get { return victoryScore; } }
+        public int FacilityCaptureScore { get { return facilityCaptureScore; } }
+        public int VehicleEliminationScore { get { return vehicleEliminationScore; } }
+        public int ActionDetectionInterval { get { return actionDetectionInterval; } }
+        public int BaseActionCount { get { return baseActionCount; } }
+        public int AdditionalActionCountPerControlCenter { get { return additionalActionCountPerControlCenter; } }
+        public int MaxUnitGroup { get { return maxUnitGroup; } }
+        public int TerrainWeatherMapColumnCount { get { return terrainWeatherMapColumnCount; } }
+        public int TerrainWeatherMapRowCount { get { return terrainWeatherMapRowCount; } }
+        public double PlainTerrainVisionFactor { get { return plainTerrainVisionFactor; } }
+        public double PlainTerrainStealthFactor { get { return plainTerrainStealthFactor; } }
+        public double PlainTerrainSpeedFactor { get { return plainTerrainSpeedFactor; } }
+        public double SwampTerrainVisionFactor { get { return swampTerrainVisionFactor; } }
+        public double SwampTerrainStealthFactor { get { return swampTerrainStealthFactor; } }
+        public double SwampTerrainSpeedFactor { get { return swampTerrainSpeedFactor; } }
+        public double ForestTerrainVisionFactor { get { return forestTerrainVisionFactor; } }
+        public double ForestTerrainStealthFactor { get { return forestTerrainStealthFactor; } }
+        public double ForestTerrainSpeedFactor { get { return forestTerrainSpeedFactor; } }
+        public double ClearWeatherVisionFactor { get { return clearWeatherVisionFactor; } }
+        public double ClearWeatherStealthFactor { get { return clearWeatherStealthFactor; } }
+        public double ClearWeatherSpeedFactor { get { return clearWeatherSpeedFactor; } }
+        public double CloudWeatherVisionFactor { get { return cloudWeatherVisionFactor; } }
+        public double CloudWeatherStealthFactor { get { return cloudWeatherStealthFactor; } }
+        public double CloudWeatherSpeedFactor { get { return cloudWeatherSpeedFactor; } }
+        public double RainWeatherVisionFactor { get { return rainWeatherVisionFactor; } }
+        public double RainWeatherStealthFactor { get { return rainWeatherStealthFactor; } }
+        public double RainWeatherSpeedFactor { get { return rainWeatherSpeedFactor; } }
+        public double VehicleRadius { get { return vehicleRadius; } }
+        public int TankDurability { get { return tankDurability; } }
+        public double TankSpeed { get { return tankSpeed; } }
+        public double TankVisionRange { get { return tankVisionRange; } }
+        public double TankGroundAttackRange { get { return tankGroundAttackRange; } }
+        public double TankAerialAttackRange { get { return tankAerialAttackRange; } }
+        public int TankGroundDamage { get { return tankGroundDamage; } }
+        public int TankAerialDamage { get { return tankAerialDamage; } }
+        public int TankGroundDefence { get { return tankGroundDefence; } }
+        public int TankAerialDefence { get { return tankAerialDefence; } }
+        public int TankAttackCooldownTicks { get { return tankAttackCooldownTicks; } }
+        public int TankProductionCost { get { return tankProductionCost; } }
+        public int IfvDurability { get { return ifvDurability; } }
+        public double IfvSpeed { get { return ifvSpeed; } }
+        public double IfvVisionRange { get { return ifvVisionRange; } }
+        public double IfvGroundAttackRange { get { return ifvGroundAttackRange; } }
+        public double IfvAerialAttackRange { get { return ifvAerialAttackRange; } }
+        public int IfvGroundDamage { get { return ifvGroundDamage; } }
+        public int IfvAerialDamage { get { return ifvAerialDamage; } }
+        public int IfvGroundDefence { get { return ifvGroundDefence; } }
+        public int IfvAerialDefence { get { return ifvAerialDefence; } }
+        public int IfvAttackCooldownTicks { get { return ifvAttackCooldownTicks; } }
+        public int IfvProductionCost { get { return ifvProductionCost; } }
+        public int ArrvDurability { get { return arrvDurability; } }
+        public double ArrvSpeed { get { return arrvSpeed; } }
+        public double ArrvVisionRange { get { return arrvVisionRange; } }
+        public int ArrvGroundDefence { get { return arrvGroundDefence; } }
+        public int ArrvAerialDefence { get { return arrvAerialDefence; } }
+        public int ArrvProductionCost { get { return arrvProductionCost; } }
+        public double ArrvRepairRange { get { return arrvRepairRange; } }
+        public double ArrvRepairSpeed { get { return arrvRepairSpeed; } }
+        public int HelicopterDurability { get { return helicopterDurability; } }
+        public double HelicopterSpeed { get { return helicopterSpeed; } }
+        public double HelicopterVisionRange { get { return helicopterVisionRange; } }
+        public double HelicopterGroundAttackRange { get { return helicopterGroundAttackRange; } }
+        public double HelicopterAerialAttackRange { get { return helicopterAerialAttackRange; } }
+        public int HelicopterGroundDamage { get { return helicopterGroundDamage; } }
+        public int HelicopterAerialDamage { get { return helicopterAerialDamage; } }
+        public int HelicopterGroundDefence { get { return helicopterGroundDefence; } }
+        public int HelicopterAerialDefence { get { return helicopterAerialDefence; } }
+        public int HelicopterAttackCooldownTicks { get { return helicopterAttackCooldownTicks; } }
+        public int HelicopterProductionCost { get { return helicopterProductionCost; } }
+        public int FighterDurability { get { return fighterDurability; } }
+        public double FighterSpeed { get { return fighterSpeed; } }
+        public double FighterVisionRange { get { return fighterVisionRange; } }
+        public double FighterGroundAttackRange { get { return fighterGroundAttackRange; } }
+        public double FighterAerialAttackRange { get { return fighterAerialAttackRange; } }
+        public int FighterGroundDamage { get { return fighterGroundDamage; } }
+        public int FighterAerialDamage { get { return fighterAerialDamage; } }
+        public int FighterGroundDefence { get { return fighterGroundDefence; } }
+        public int FighterAerialDefence { get { return fighterAerialDefence; } }
+        public int FighterAttackCooldownTicks { get { return fighterAttackCooldownTicks; } }
+        public int FighterProductionCost { get { return fighterProductionCost; } }
+        public double MaxFacilityCapturePoints { get { return maxFacilityCapturePoints; } }
+        public double FacilityCapturePointsPerVehiclePerTick { get { return facilityCapturePointsPerVehiclePerTick; } }
+        public double FacilityWidth { get { return facilityWidth; } }
+        public double FacilityHeight { get { return facilityHeight; } }
+        public int BaseTacticalNuclearStrikeCooldown { get { return baseTacticalNuclearStrikeCooldown; } }
+        public int TacticalNuclearStrikeCooldownDecreasePerControlCenter { get { return tacticalNuclearStrikeCooldownDecreasePerControlCenter; } }
+        public double MaxTacticalNuclearStrikeDamage { get { return maxTacticalNuclearStrikeDamage; } }
+        public double TacticalNuclearStrikeRadius { get { return tacticalNuclearStrikeRadius; } }
+        public int TacticalNuclearStrikeDelay { get { return tacticalNuclearStrikeDelay; } }
     }
 }

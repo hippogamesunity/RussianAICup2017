@@ -99,6 +99,19 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 				move.Action = action.Action;
 				move.X = action.X;
 				move.Y = action.Y;
+				if (action.Relative)
+				{
+					var units = Global.MyUnits;
+					if (action.Formation != null)
+						units = action.Formation.Units;
+					move.X = units.Average(i => i.X);
+					move.Y = units.Average(i => i.Y);
+					if (move.Action == ActionType.Move)
+					{
+						move.X -= action.X;
+						move.Y -= action.Y;
+					}
+				}
 				move.Angle = action.Angle;
 				move.Right = action.Right;
 				move.Bottom = action.Bottom;

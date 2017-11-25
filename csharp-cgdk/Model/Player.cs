@@ -28,15 +28,36 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             this.nextNuclearStrikeY = nextNuclearStrikeY;
         }
 
-        public long Id => id;
-        public bool IsMe => isMe;
-        public bool IsStrategyCrashed => isStrategyCrashed;
-        public int Score => score;
-        public int RemainingActionCooldownTicks => remainingActionCooldownTicks;
-        public int RemainingNuclearStrikeCooldownTicks => remainingNuclearStrikeCooldownTicks;
-        public long NextNuclearStrikeVehicleId => nextNuclearStrikeVehicleId;
-        public int NextNuclearStrikeTickIndex => nextNuclearStrikeTickIndex;
-        public double NextNuclearStrikeX => nextNuclearStrikeX;
-        public double NextNuclearStrikeY => nextNuclearStrikeY;
+        public long Id{
+            get { return id; }
+        }
+        public bool IsMe{
+            get { return isMe; }
+        }
+        public bool IsStrategyCrashed{
+            get { return isStrategyCrashed; }
+        }
+        public int Score{
+            get { return score; }
+        }
+        public int RemainingActionCooldownTicks{
+            get { return remainingActionCooldownTicks; }
+        }
+        public int RemainingNuclearStrikeCooldownTicks{
+            get { return remainingNuclearStrikeCooldownTicks; }
+        }
+        public long NextNuclearStrikeVehicleId{
+            get { return nextNuclearStrikeVehicleId; }
+        }
+        public int NextNuclearStrikeTickIndex{
+            get { return nextNuclearStrikeTickIndex; }
+        }
+        public double NextNuclearStrikeX{
+            get { return nextNuclearStrikeX; }
+        }
+        public double NextNuclearStrikeY
+        {
+            get { return nextNuclearStrikeY; }
+        }
     }
 }

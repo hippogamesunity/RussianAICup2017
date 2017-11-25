@@ -21,13 +21,30 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             this.productionProgress = productionProgress;
         }
 
-        public long Id => id;
-        public FacilityType Type => type;
-        public long OwnerPlayerId => ownerPlayerId;
-        public double Left => left;
-        public double Top => top;
-        public double CapturePoints => capturePoints;
-        public VehicleType? VehicleType => vehicleType;
-        public int ProductionProgress => productionProgress;
+        public long Id{
+            get { return id; }
+        }
+        public FacilityType Type{
+            get { return type; }
+        }
+        public long OwnerPlayerId{
+            get { return ownerPlayerId; }
+        }
+        public double Left{
+            get { return left; }
+        }
+        public double Top{
+            get { return top; }
+        }
+        public double CapturePoints{
+            get { return capturePoints; }
+        }
+        public VehicleType? VehicleType{
+            get { return vehicleType; }
+        }
+        public int ProductionProgress
+        {
+            get { return productionProgress; }
+        }
     }
 }

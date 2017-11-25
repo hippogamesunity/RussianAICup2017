@@ -65,18 +65,18 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// </summary>
 		/// <param name="scale"></param>
 		/// <param name="position"></param>
-		public static void Scale(double scale, Position position, Formation formation = null, int waitDuringTicks = 0)
+		public static void Scale(double scale, Point position, Formation formation = null, int waitDuringTicks = 0)
         {
 			Scale(scale, position.X, position.Y, formation, waitDuringTicks);
         }
 
 		/// <summary>
-		/// Масштабирование относительно центра всех юнитов игрока
+		/// Масштабирование относительно центра масс юнитов игрока
 		/// </summary>
 		/// <param name="scale"></param>
-		public static void Scale(double scale, Formation formation = null, int waitDuringTicks = 0)
+		public static void ScaleRelative(double scale, Formation formation = null, int waitDuringTicks = 0)
         {
-			Scale(scale, Global.MyUnits.Average(i => i.X), Global.MyUnits.Average(i => i.Y), formation, waitDuringTicks);
+			Global.ActionQueue.Add(new Action { Action = ActionType.Scale, Factor = scale, Formation = formation, WaitDuringTicks = waitDuringTicks, Relative = true });
         }
 
         #endregion
@@ -100,7 +100,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// <param name="angle"></param>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
-		private static void Rotate(double angle, Position position)
+		private static void Rotate(double angle, Point position)
 		{
 			Rotate(angle, position.X, position.Y);
 		}
@@ -118,6 +118,17 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		public static void Move(double x, double y, Formation formation = null, int waitDuringTicks = 0, double maxSpeed = 0)
 		{
 			Global.ActionQueue.Add(new Action { Action = ActionType.Move, X = x, Y = y, MaxSpeed = maxSpeed, Formation = formation, WaitDuringTicks = waitDuringTicks });
+		}
+
+		/// <summary>
+		/// Двигаться к точке с заданной скоростью
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="maxSpeed"></param>
+		public static void MoveRelative(double x, double y, Formation formation = null, int waitDuringTicks = 0, double maxSpeed = 0)
+		{
+			Global.ActionQueue.Add(new Action { Action = ActionType.Move, X = x, Y = y, MaxSpeed = maxSpeed, Formation = formation, WaitDuringTicks = waitDuringTicks, Relative = true });
 		}
 
 		#endregion

@@ -80,6 +80,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             }
 
 			MyUnits = Units.Values.Where(i => i.PlayerId == Me.Id).ToList();
+
+			Tactic.UpdateFormations();
         }
     }
 
@@ -131,6 +133,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 return Condition == null || Condition();
             }
         }
+
+		/// <summary>
+		/// Если действие относительное, то Х и У для него не передаются приказом, а вычисляются в момент выполнения действия
+		/// </summary>
+		public bool Relative = false;
     }
 
     /// <summary>
@@ -176,13 +183,13 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <summary>
         /// Направление движения юнита (разница между текущей и предыдущей точкой местоположения)
         /// </summary>
-        public Position Direction;
+        public Point Direction;
 
         /// <summary>
         /// Движется ли юнит. Юнит предположительно неподвижен, если дистанция на которую он передвинулся за ход
         /// меньше четверти от его скорости.
         /// </summary>
-        public bool IsMoving { get { return Direction.Distance(Position.Zero) >= Vehicle.MaxSpeed / 4; } }
+        public bool IsMoving { get { return Direction.Distance(Point.Zero) >= Vehicle.MaxSpeed / 4; } }
 
         /// <summary>
         /// Создание юнита
@@ -205,7 +212,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <param name="vehicleUpdate"></param>
         public void Update(VehicleUpdate vehicleUpdate)
         {
-            Direction = new Position(vehicleUpdate.X, vehicleUpdate.Y) - new Position(X, Y);
+            Direction = new Point(vehicleUpdate.X, vehicleUpdate.Y) - new Point(X, Y);
             X = vehicleUpdate.X;
             Y = vehicleUpdate.Y;
             Durability = vehicleUpdate.Durability;

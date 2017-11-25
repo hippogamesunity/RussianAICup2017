@@ -9,7 +9,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
     /// <summary>
     /// Точка в двумерном пространстве
     /// </summary>
-    public class Position
+    public class Point
     {
         /// <summary>
         /// Х-координата точки
@@ -24,14 +24,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <summary>
         /// Нулевая точка
         /// </summary>
-        public static Position Zero { get { return new Position(0, 0); } }
+        public static Point Zero { get { return new Point(0, 0); } }
 
         /// <summary>
         /// Точка пространства
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public Position(double x, double y)
+        public Point(double x, double y)
         {
             X = x;
             Y = y;
@@ -55,7 +55,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public double Distance(Position other)
+        public double Distance(Point other)
         {
 			return Distance( other.X, other.Y );
         }
@@ -76,9 +76,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Position operator +(Position a, Position b)
+        public static Point operator +(Point a, Point b)
         {
-            return new Position(a.X + b.X, a.Y + b.Y);
+            return new Point(a.X + b.X, a.Y + b.Y);
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Position operator -(Position a, Position b)
+        public static Point operator -(Point a, Point b)
         {
-            return new Position(a.X - b.X, a.Y - b.Y);
+            return new Point(a.X - b.X, a.Y - b.Y);
         }
     }
 
@@ -101,19 +101,19 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <summary>
         /// Левый верхний угол прямоугольника (для незаданного содержит некорректное значение int.MaxValue)
         /// </summary>
-        public Position LeftTop = new Position(int.MaxValue, int.MaxValue);
+        public Point LeftTop = new Point(int.MaxValue, int.MaxValue);
 
         /// <summary>
         /// Правый нижний угол прямоугольника (для незаданного содержит некорректное значение 0)
         /// </summary>
-        public Position RightBottom = new Position(0, 0);
+        public Point RightBottom = new Point(0, 0);
 
         /// <summary>
         /// Центр прямоугольника
         /// </summary>
-        public Position Center
+        public Point Center
         {
-            get { return new Position((RightBottom.X + LeftTop.X) / 2, (RightBottom.Y + LeftTop.Y) / 2); }
+            get { return new Point((RightBottom.X + LeftTop.X) / 2, (RightBottom.Y + LeftTop.Y) / 2); }
         }
 
 		public Rect()

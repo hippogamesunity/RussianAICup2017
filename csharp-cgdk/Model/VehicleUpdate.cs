@@ -23,12 +23,25 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             Array.Copy(groups, this.groups, groups.Length);
         }
 
-        public long Id => id;
-        public double X => x;
-        public double Y => y;
-        public int Durability => durability;
-        public int RemainingAttackCooldownTicks => remainingAttackCooldownTicks;
-        public bool IsSelected => isSelected;
+        public long Id{
+            get{ return id;  }
+        }
+        public double X{
+            get{ return x;  }
+        }
+        public double Y{
+            get{ return y;  }
+        }
+        public int Durability{
+            get{ return durability;  }
+        }
+        public int RemainingAttackCooldownTicks{
+            get{ return remainingAttackCooldownTicks;  }
+        }
+        public bool IsSelected
+        {
+            get { return isSelected; }
+        }
 
         public int[] Groups {
             get {

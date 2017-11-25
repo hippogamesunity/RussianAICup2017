@@ -9,11 +9,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 	public class Helpers
 	{
 		
-		private static Position Middle(Player player)
+		private static Point Middle(Player player)
 		{
 			var units = Global.Units.Values.Where(i => i.PlayerId == player.Id).ToList();
 
-			return new Position(units.Average(i => i.X), units.Average(i => i.Y));
+			return new Point(units.Average(i => i.X), units.Average(i => i.Y));
 		}
 
 		private double GetDistance(VehicleWrapper from, VehicleWrapper to)

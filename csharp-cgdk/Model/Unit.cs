@@ -12,9 +12,17 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             this.y = y;
         }
 
-        public long Id => id;
-        public double X => x;
-        public double Y => y;
+        public long Id
+        {
+            get{ return id;  }
+        }
+        public double X{
+            get{ return x;  }
+        }
+        public double Y
+        {
+            get { return y; }
+        }
 
         public double GetDistanceTo(double x, double y) {
             double xRange = x - this.x;

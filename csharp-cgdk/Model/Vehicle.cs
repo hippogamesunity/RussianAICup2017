@@ -80,25 +80,25 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             Array.Copy(updateGroups, this.groups, updateGroups.Length);
         }
 
-        public long PlayerId => playerId;
-        public int Durability => durability;
-        public int MaxDurability => maxDurability;
-        public double MaxSpeed => maxSpeed;
-        public double VisionRange => visionRange;
-        public double SquaredVisionRange => squaredVisionRange;
-        public double GroundAttackRange => groundAttackRange;
-        public double SquaredGroundAttackRange => squaredGroundAttackRange;
-        public double AerialAttackRange => aerialAttackRange;
-        public double SquaredAerialAttackRange => squaredAerialAttackRange;
-        public int GroundDamage => groundDamage;
-        public int AerialDamage => aerialDamage;
-        public int GroundDefence => groundDefence;
-        public int AerialDefence => aerialDefence;
-        public int AttackCooldownTicks => attackCooldownTicks;
-        public int RemainingAttackCooldownTicks => remainingAttackCooldownTicks;
-        public VehicleType Type => type;
-        public bool IsAerial => isAerial;
-        public bool IsSelected => isSelected;
+        public long PlayerId { get { return playerId; } }
+        public int Durability { get { return durability; } }
+        public int MaxDurability { get { return maxDurability; } }
+        public double MaxSpeed { get { return maxSpeed; } }
+        public double VisionRange { get { return visionRange; } }
+        public double SquaredVisionRange { get { return squaredVisionRange; } }
+        public double GroundAttackRange { get { return groundAttackRange; } }
+        public double SquaredGroundAttackRange { get { return squaredGroundAttackRange; } }
+        public double AerialAttackRange { get { return aerialAttackRange; } }
+        public double SquaredAerialAttackRange { get { return squaredAerialAttackRange; } }
+        public int GroundDamage { get { return groundDamage; } }
+        public int AerialDamage { get { return aerialDamage; } }
+        public int GroundDefence { get { return groundDefence; } }
+        public int AerialDefence { get { return aerialDefence; } }
+        public int AttackCooldownTicks { get { return attackCooldownTicks; } }
+        public int RemainingAttackCooldownTicks { get { return remainingAttackCooldownTicks; } }
+        public VehicleType Type { get { return type; } }
+        public bool IsAerial { get { return isAerial; } }
+        public bool IsSelected { get { return isSelected; } }
 
         public int[] Groups {
             get {

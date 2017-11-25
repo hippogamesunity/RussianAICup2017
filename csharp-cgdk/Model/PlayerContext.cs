@@ -10,7 +10,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model {
             this.world = world;
         }
 
-        public Player Player => player;
-        public World World => world;
+        public Player Player { get { return player; } }
+        public World World { get { return world; } }
     }
 }
