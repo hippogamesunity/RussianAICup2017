@@ -190,6 +190,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// </summary>
         public Position Position = new Position(0, 0);
 
+        public TerrainType TerrainType;
+        public WeatherType WeatherType;
+
         /// <summary>
         /// Движется ли юнит. Юнит предположительно неподвижен, если дистанция на которую он передвинулся за ход
         /// меньше четверти от его скорости.
@@ -222,6 +225,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             Y = vehicleUpdate.Y;
             Position.X = X;
             Position.Y = Y;
+            TerrainType = Global.World.TerrainByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)];
+            WeatherType = Global.World.WeatherByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)];
             Durability = vehicleUpdate.Durability;
         }
 
@@ -233,16 +238,6 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         public bool CanSee(VehicleWrapper target) // 2.4 Типы местности и погоды
         {
             return Position.Distance(target.Position) <= Vehicle.VisionRange * VisionFactor * target.StealthFactor;
-        }
-
-        public TerrainType TerrainType
-        {
-            get { return Global.World.TerrainByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)]; }
-        }
-
-        public WeatherType WeatherType
-        {
-            get { return Global.World.WeatherByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)]; }
         }
 
         public double VisionFactor
