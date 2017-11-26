@@ -17,11 +17,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
                 foreach (var target in enemyUnits)
                 {
-                    var visors = myUnits.Where(i => i.CanSee(target)).ToList();
+                    var visors = myUnits.Where(i => i.CanSee(target, 0.85)).ToList(); // gap компенсирует последующее движение юнитов
 
                     if (visors.Count == 0) continue;
 
-                    var affected = Global.Units.Values.Where(i => i.Distance(target) < Global.Game.TacticalNuclearStrikeRadius).ToList();
+                    var affected = Global.Units.Values.Where(i => i.Distance(target) < 0.85 * Global.Game.TacticalNuclearStrikeRadius).ToList();
 
                     if (affected.Count <= 50) continue;
 
@@ -45,7 +45,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 if (best.Value > threshold)
                 {
                     var target = best.Key;
-                    var visor = myUnits.Where(i => i.CanSee(target)).OrderBy(i => i.Distance(target)).Last();
+                    var visor = myUnits.Where(i => i.CanSee(target, 0.85)).OrderBy(i => i.Distance(target)).Last(); // gap компенсирует последующее движение юнитов
 
                     var affectedEnemies = Global.Units.Values.Where(i => i.PlayerId != Global.Me.Id && i.Distance(target) < Global.Game.TacticalNuclearStrikeRadius).ToList();
                     var direction = new Position(affectedEnemies.Average(i => i.Direction.X), affectedEnemies.Average(i => i.Direction.Y));

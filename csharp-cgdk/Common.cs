@@ -235,9 +235,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             return Position.Distance(target.Position);
         }
 
-        public bool CanSee(VehicleWrapper target) // 2.4 Типы местности и погоды
+        public bool CanSee(VehicleWrapper target, double gap = 1) // 2.4 Типы местности и погоды
         {
-            return Position.Distance(target.Position) <= Vehicle.VisionRange * VisionFactor * target.StealthFactor;
+            return Position.Distance(target.Position) <= gap * Vehicle.VisionRange * VisionFactor * target.StealthFactor;
         }
 
         public double VisionFactor
