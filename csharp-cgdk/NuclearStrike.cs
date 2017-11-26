@@ -9,7 +9,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
     {
         private void NuclearStrike()
         {
-            if (Global.Me.NextNuclearStrikeTickIndex == -1 && Global.World.TickIndex % 60 == 0)
+            if (Global.Me.NextNuclearStrikeTickIndex == 0 && Global.World.TickIndex % 60 == 0)
             {
                 var myUnits = Global.Units.Values.Where(i => i.PlayerId == Global.Me.Id).ToList();
                 var enemyUnits = Global.Units.Values.Where(i => i.PlayerId != Global.Me.Id).ToList();
