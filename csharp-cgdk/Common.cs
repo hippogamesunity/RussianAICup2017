@@ -188,7 +188,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <summary>
         /// 
         /// </summary>
-        public Position Position { get { return new Position(X, Y); } }
+        public Position Position = new Position(0, 0);
 
         /// <summary>
         /// Движется ли юнит. Юнит предположительно неподвижен, если дистанция на которую он передвинулся за ход
@@ -220,6 +220,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             Direction = new Point(vehicleUpdate.X, vehicleUpdate.Y) - new Point(X, Y);
             X = vehicleUpdate.X;
             Y = vehicleUpdate.Y;
+            Position.X = X;
+            Position.Y = Y;
             Durability = vehicleUpdate.Durability;
         }
 
@@ -235,12 +237,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         public TerrainType TerrainType
         {
-            get { return Global.World.TerrainByCellXY[(int) Math.Ceiling(X / 32)][(int) Math.Ceiling(Y / 32)]; }
+            get { return Global.World.TerrainByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)]; }
         }
 
         public WeatherType WeatherType
         {
-            get { return Global.World.WeatherByCellXY[(int) Math.Ceiling(X / 32)][(int) Math.Ceiling(Y / 32)]; }
+            get { return Global.World.WeatherByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)]; }
         }
 
         public double VisionFactor

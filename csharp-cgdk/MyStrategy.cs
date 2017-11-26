@@ -32,7 +32,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             //}
             
             //EvadeNuclearStrike(world, me);
-            //NuclearStrike(world, me, game);
+            NuclearStrike();
             Global.ActionQueue.Process();
         }
         
