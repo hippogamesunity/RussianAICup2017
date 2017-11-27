@@ -55,9 +55,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <param name="scale"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-		public static void Scale(double scale, double x, double y, Formation formation = null, int waitDuringTicks = 0)
+		public static void Scale(double scale, double x, double y, Formation formation = null, int waitDuringTicks = 0, bool urgent = false )
         {
-			Global.ActionQueue.Add(new Action { Action = ActionType.Scale, Factor = scale, X = x, Y = y, Formation = formation, WaitDuringTicks = waitDuringTicks });
+			Global.ActionQueue.Add(new Action { Action = ActionType.Scale, Factor = scale, X = x, Y = y, Formation = formation, WaitDuringTicks = waitDuringTicks, Urgent = urgent });
         }
 
 		/// <summary>
@@ -65,16 +65,16 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// </summary>
 		/// <param name="scale"></param>
 		/// <param name="position"></param>
-		public static void Scale(double scale, Point position, Formation formation = null, int waitDuringTicks = 0)
+		public static void Scale(double scale, Point position, Formation formation = null, int waitDuringTicks = 0, bool urgent = false)
         {
-			Scale(scale, position.X, position.Y, formation, waitDuringTicks);
+			Scale(scale, position.X, position.Y, formation, waitDuringTicks, urgent);
         }
 
 		/// <summary>
 		/// Масштабирование относительно центра масс юнитов игрока
 		/// </summary>
 		/// <param name="scale"></param>
-		public static void ScaleRelative(double scale, Formation formation = null, int waitDuringTicks = 0)
+		public static void ScaleRelative(double scale, Formation formation = null, int waitDuringTicks = 0, bool urgent = false)
         {
 			Global.ActionQueue.Add(new Action { Action = ActionType.Scale, Factor = scale, Formation = formation, WaitDuringTicks = waitDuringTicks, Relative = true });
         }

@@ -188,7 +188,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <summary>
         /// 
         /// </summary>
-        public Position Position = new Position(0, 0);
+		public Point Position = new Point(0, 0);
 
         public TerrainType TerrainType;
         public WeatherType WeatherType;

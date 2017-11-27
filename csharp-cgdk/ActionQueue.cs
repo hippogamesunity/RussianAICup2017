@@ -108,8 +108,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 					move.Y = units.Average(i => i.Y);
 					if (move.Action == ActionType.Move)
 					{
-						move.X -= action.X;
-						move.Y -= action.Y;
+						move.X = action.X - move.X;
+						move.Y = action.Y - move.Y;
 					}
 				}
 				move.Angle = action.Angle;

@@ -75,6 +75,7 @@
     <Compile Include="ActionQueue.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="CreateFormations.cs" />
     <Compile Include="Formation.cs" />
     <Compile Include="Helpers.cs">
       <SubType>Code</SubType>

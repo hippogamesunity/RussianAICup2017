@@ -20,19 +20,20 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         {
             Global.Update( me, world, game, move );
 
-			Tactic.GroupRush();
+			if ( world.TickIndex == 0 )
+				CreateFormations();
 
-            //if (world.TickIndex < 0.75 * world.TickCount && !Tactic.EnemyIsWeaker )
-           // {
+			if (world.TickIndex < 0.75 * world.TickCount && !Tactic.EnemyIsWeaker )
+            {
                 //Hurricane(world, me);
-            //}
-            //else
-            //{
-            //    Rush(expand: true);
-            //}
-            
-            //EvadeNuclearStrike(world, me);
-            NuclearStrike();
+            }
+            else
+            {
+				Tactic.Rush(expand: true);
+            }
+
+			//Tactic.AntiNuclearStrike();
+            //NuclearStrike();
             Global.ActionQueue.Process();
         }
         

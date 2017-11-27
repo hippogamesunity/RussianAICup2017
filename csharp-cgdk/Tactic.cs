@@ -156,6 +156,140 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
 		#endregion
 
+		#region Hurricane
+
+		/*int formationCompression = 0;
+
+		int formationMoveFreeze = 0;
+
+		public Point LastHurricaneCenter = new Point();
+
+		Point GetHurricaneCenter(Player me, World world)
+		{
+			var units = Units.Values.Where(j => j.PlayerId == me.Id).ToList();
+			return new Point(units.Average(j => j.X), units.Average(j => j.Y));
+		}
+
+		void CompressFormation(Point center)
+		{
+			if (formationCompression > -1)
+			{
+				formationCompression--;
+				Scale(0.2, center.X, center.Y);
+			}
+		}
+
+		void DecompressFormation(Point center)
+		{
+			if (formationCompression < 1)
+			{
+				formationCompression++;
+				Scale(2, center.X, center.Y);
+			}
+		}
+
+		VehicleWrapper GetNearestEnemy(Point hurricanecenter, Player me)
+		{
+			VehicleWrapper result = null;
+			double d = Double.MaxValue;
+			var units = Units.Values.Where(i => i.PlayerId != me.Id).ToList();
+			if (units.Count > 0)
+			{
+				foreach (var unit in units)
+				{
+					var nd = GetDistance(hurricanecenter, unit);
+					if (nd < d)
+					{
+						d = nd;
+						result = unit;
+					}
+				}
+			}
+			return result;
+		}
+
+		private void Hurricane(World world, Player me)
+		{
+			Point hurricaneCenter = AllMyUnits.MassCenter;
+			bool formationMoved = false;
+			if ( hurricaneCenter.Distance(LastHurricaneCenter) > 40 )
+				formationMoved = true;
+			if (formationMoveFreeze > 0)
+				formationMoveFreeze--;
+			LastHurricaneCenter = hurricaneCenter;
+
+			if (world.TickIndex > FormationsCreatedTick && world.TickIndex % 180 == 0)
+			{
+				AllMyUnits.R
+				Rotate(Math.PI, hurricaneCenter.X, hurricaneCenter.Y);
+			}
+
+			if (world.TickIndex > FormationsCreatedTick && world.TickIndex % 360 == 100)
+			{
+				Scale(0.2, hurricaneCenter.X, hurricaneCenter.Y);
+			}
+
+			if (world.TickIndex > FormationsCreatedTick + 300 && world.TickIndex < 10000)
+			{
+				if (!formationMoved && formationMoveFreeze == 0)
+				{
+					var unit = GetNearestEnemy(hurricaneCenter, me);
+					if (unit != null)
+					{
+						var unitDistance = GetDistance(hurricaneCenter, unit);
+						if (unitDistance < 40)
+						{
+							CompressFormation(hurricaneCenter);
+						}
+						else
+						{
+							formationMoveFreeze = 100;
+							DecompressFormation(hurricaneCenter);
+							Move(unit.X - hurricaneCenter.X, unit.Y - hurricaneCenter.Y, 0.35);
+						}
+					}
+				}
+			}
+		}*/
+
+		#endregion
+
+		#region ANTI NUKE
+
+		public static AntiNukeInfo AntiNuke = null;
+
+		public class AntiNukeInfo
+		{
+			public Point NukePoint;
+
+			public int Tick;
+		}
+
+		public static void AntiNuclearStrike()
+		{
+			Player opponent = Global.World.GetOpponentPlayer();
+			if (opponent.NextNuclearStrikeVehicleId != -1 && AntiNuke == null)
+			{
+				AllMyUnits.UrgentScale(10, opponent.NextNuclearStrikeX, opponent.NextNuclearStrikeY);
+				AntiNuke = new AntiNukeInfo();
+				AntiNuke.NukePoint = new Point(opponent.NextNuclearStrikeX, opponent.NextNuclearStrikeY);
+				AntiNuke.Tick = opponent.NextNuclearStrikeTickIndex;
+			}
+			else if (AntiNuke != null)
+			{
+				if (AntiNuke.Tick < Global.World.TickIndex - 50)
+				{
+					AntiNuke = null;
+				}
+				else if (AntiNuke.Tick + 20 == Global.World.TickIndex)
+				{
+					AllMyUnits.UrgentScale(0.2, AntiNuke.NukePoint.X, AntiNuke.NukePoint.Y);
+				}
+			}
+		}
+
+		#endregion
+
 		#endregion
 	}
 }

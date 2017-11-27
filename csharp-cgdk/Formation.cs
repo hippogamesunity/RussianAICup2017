@@ -130,7 +130,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		public void MoveTo(double X, double Y, int WaitDuringTicks = 20000, double MaxSpeed = 0)
         {
             // Дистанция до цели
-            double dist = Rectangle.Center.Distance(X, Y);
+            double dist = MassCenter.Distance(X, Y);
 			if (MaxSpeed > 0)
 				dist /= MaxSpeed;
 			else
@@ -140,13 +140,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			if ( tickIndex > WaitDuringTicks )
 				tickIndex = WaitDuringTicks;
 
-            // Относительные координаты (вектор движения)
-            double x = X - Rectangle.Center.X;
-			double y = Y - Rectangle.Center.Y;
-
             // Перемещение группы по заданному вектору. Группа задает расчетное время ( расстояние * константа ) за которое она переместится. Пока это время
             // не истечет, группа не будет получать новых приказов (за исключением urgent)
-            Command.Move(x, y, this, tickIndex, MaxSpeed);
+            Command.MoveRelative(X, Y, this, tickIndex, MaxSpeed);
         }
 
         /// <summary>
@@ -162,6 +158,15 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 				tickIndex = WaitDuringTicks;
             Command.ScaleRelative(value, this, tickIndex);
         }
+
+		/// <summary>
+		/// Срочное масштабирование группы (уклонение от атаки)
+		/// </summary>
+		/// <param name="value"></param>
+		public void UrgentScale(double value, double X, double Y)
+		{
+			Command.Scale(value, X, Y, this, 0, true);
+		}
 
 		/// <summary>
 		/// Имеются ли в очереди приказы для данной группы. Если имеются новых не добавлять
