@@ -211,6 +211,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             Durability = vehicle.Durability;
             PlayerId = vehicle.PlayerId;
             Vehicle = vehicle;
+			Direction = Point.Zero;
         }
 
         /// <summary>

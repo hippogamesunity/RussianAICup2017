@@ -23,6 +23,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		public static Formation Ifvs = new Formation(VehicleType.Ifv);
 		public static Formation Tanks = new Formation(VehicleType.Tank);
 
+		public static int FormationsReady = 0;
+
         /// <summary>
         /// 
         /// </summary>
@@ -158,46 +160,22 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
 		#region Hurricane
 
-		/*int formationCompression = 0;
+		static int formationCompression = 0;
 
-		int formationMoveFreeze = 0;
+		static int formationMoveFreeze = 0;
 
-		public Point LastHurricaneCenter = new Point();
+		public static Point LastHurricaneCenter = new Point(0, 0);
 
-		Point GetHurricaneCenter(Player me, World world)
-		{
-			var units = Units.Values.Where(j => j.PlayerId == me.Id).ToList();
-			return new Point(units.Average(j => j.X), units.Average(j => j.Y));
-		}
-
-		void CompressFormation(Point center)
-		{
-			if (formationCompression > -1)
-			{
-				formationCompression--;
-				Scale(0.2, center.X, center.Y);
-			}
-		}
-
-		void DecompressFormation(Point center)
-		{
-			if (formationCompression < 1)
-			{
-				formationCompression++;
-				Scale(2, center.X, center.Y);
-			}
-		}
-
-		VehicleWrapper GetNearestEnemy(Point hurricanecenter, Player me)
+		static VehicleWrapper GetNearestEnemy(Point hurricanecenter, Player me)
 		{
 			VehicleWrapper result = null;
 			double d = Double.MaxValue;
-			var units = Units.Values.Where(i => i.PlayerId != me.Id).ToList();
+			var units = Global.Units.Values.Where(i => i.PlayerId != me.Id).ToList();
 			if (units.Count > 0)
 			{
 				foreach (var unit in units)
 				{
-					var nd = GetDistance(hurricanecenter, unit);
+					var nd = hurricanecenter.Distance(unit);
 					if (nd < d)
 					{
 						d = nd;
@@ -208,49 +186,51 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			return result;
 		}
 
-		private void Hurricane(World world, Player me)
+		public static void Hurricane()
 		{
-			Point hurricaneCenter = AllMyUnits.MassCenter;
+			//FormationHurricane(Helicopters);
+			//FormationHurricane(Fighters);
+			//FormationHurricane(Tanks);
+			//FormationHurricane(Arrvs);
+			//FormationHurricane(Ifvs);			
+		}
+
+		protected static void FormationHurricane(Formation formation)
+		{
+			Point hurricaneCenter = formation.MassCenter;
 			bool formationMoved = false;
-			if ( hurricaneCenter.Distance(LastHurricaneCenter) > 40 )
+			if (hurricaneCenter.Distance(LastHurricaneCenter) > 40)
 				formationMoved = true;
 			if (formationMoveFreeze > 0)
 				formationMoveFreeze--;
 			LastHurricaneCenter = hurricaneCenter;
 
-			if (world.TickIndex > FormationsCreatedTick && world.TickIndex % 180 == 0)
+			if (Global.World.TickIndex > FormationsReady && !formation.Busy)
 			{
-				AllMyUnits.R
-				Rotate(Math.PI, hurricaneCenter.X, hurricaneCenter.Y);
+				formation.Scale(0.2);
 			}
 
-			if (world.TickIndex > FormationsCreatedTick && world.TickIndex % 360 == 100)
-			{
-				Scale(0.2, hurricaneCenter.X, hurricaneCenter.Y);
-			}
-
-			if (world.TickIndex > FormationsCreatedTick + 300 && world.TickIndex < 10000)
+			if (Global.World.TickIndex > FormationsReady + 300 && Global.World.TickIndex < 10000 && !formation.Busy)
 			{
 				if (!formationMoved && formationMoveFreeze == 0)
 				{
-					var unit = GetNearestEnemy(hurricaneCenter, me);
+					var unit = GetNearestEnemy(hurricaneCenter, Global.Me);
 					if (unit != null)
 					{
-						var unitDistance = GetDistance(hurricaneCenter, unit);
+						var unitDistance = hurricaneCenter.Distance(unit);
 						if (unitDistance < 40)
 						{
-							CompressFormation(hurricaneCenter);
+							formation.Scale(0.1);
 						}
 						else
 						{
 							formationMoveFreeze = 100;
-							DecompressFormation(hurricaneCenter);
-							Move(unit.X - hurricaneCenter.X, unit.Y - hurricaneCenter.Y, 0.35);
+							formation.MoveTo(unit.X, unit.Y, 180, 0.35);
 						}
 					}
 				}
 			}
-		}*/
+		}
 
 		#endregion
 

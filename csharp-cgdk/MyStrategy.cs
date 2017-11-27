@@ -25,17 +25,20 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			else
 				MergeFormations();
 
-			if (world.TickIndex < 0.75 * world.TickCount && !Tactic.EnemyIsWeaker )
-            {
-                //Hurricane(world, me);
-            }
-            else
-            {
-				Tactic.Rush(expand: true);
-            }
+			if (Tactic.FormationsReady > 0 && world.TickIndex > Tactic.FormationsReady)
+			{
 
-			//Tactic.AntiNuclearStrike();
-            //NuclearStrike();
+				if (world.TickIndex < 0.75 * world.TickCount && !Tactic.EnemyIsWeaker)
+				{
+					Tactic.Hurricane();
+				}
+				else
+				{
+					Tactic.Rush(expand: true);
+				}
+				Tactic.AntiNuclearStrike();
+			}			
+            NuclearStrike();
             Global.ActionQueue.Process();
         }
         

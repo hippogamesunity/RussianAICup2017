@@ -8,7 +8,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 	public partial class MyStrategy
 	{
 		static Formation rightFormation, leftFormation, middleFormation, mainAviaUnits, addAviaUnits;
-		static bool mergedM2R = false, mergedL2R;
+		static bool mergedM2R = false, mergedL2R = false;
 
 		public void CreateFormations()
 		{
@@ -26,13 +26,13 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 				addAviaUnits = Tactic.Fighters;
 			}
 
-			mainAviaUnits.MoveTo(200, 200);
+			mainAviaUnits.MoveTo(250, 250);
 			mainAviaUnits.Scale(1.7);
 
 			addAviaUnits.TickIndex += 60;
-			addAviaUnits.MoveTo(50, 205);
+			addAviaUnits.MoveTo(50, 255);
 			addAviaUnits.Scale(1.7);
-			addAviaUnits.MoveTo(200, 205);
+			addAviaUnits.MoveTo(250, 255);
 
 			#endregion
 
@@ -60,7 +60,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
 			leftFormation.Scale(0.8);
 			leftFormation.MoveTo(leftFormation.MassCenter.X, 250);
-			leftFormation.MoveTo(30, 240);
+			leftFormation.MoveTo(30, 238);
 
 			middleFormation.TickIndex += 150;
 			middleFormation.Scale(0.8);
@@ -90,9 +90,19 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			} 
 			else if (!mergedL2R && !rightFormation.Busy && !middleFormation.Busy && Global.World.TickIndex > 900 )
 			{
+				middleFormation.Scale(1.5);
+				rightFormation.Scale(1.5);
+				leftFormation.MoveTo(80, 238);
+				leftFormation.Scale(3.75);
+				leftFormation.MoveTo(250, 240);
+				mergedL2R = true;
+			}
+			else if (mergedL2R && mergedM2R && Tactic.FormationsReady == 0 && !leftFormation.Busy && Global.World.TickIndex > 2000)
+			{
+				Tactic.FormationsReady = Global.World.TickIndex;
+				leftFormation.Scale(0.1);
 				middleFormation.Scale(0.1);
 				rightFormation.Scale(0.1);
-				mergedM2R = true;
 			}
 		}
 	}
