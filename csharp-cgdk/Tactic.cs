@@ -147,8 +147,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// </summary>
 		public static void GroupRush()
 		{
-			CommonAttack(AllMyUnits, new List<VehicleType> { VehicleType.Tank, VehicleType.Ifv, VehicleType.Helicopter, VehicleType.Fighter, VehicleType.Arrv });
-			AllMyUnits.Scale(0.1);
+			if (!AllMyUnits.HasOrders())
+			{
+				CommonAttack(AllMyUnits, new List<VehicleType> { VehicleType.Tank, VehicleType.Ifv, VehicleType.Helicopter, VehicleType.Fighter, VehicleType.Arrv });
+				AllMyUnits.Scale(0.1);
+			}
 		}
 
 		#endregion
