@@ -67,6 +67,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 Units.Add( newVehicle.Id, new VehicleWrapper(newVehicle) );
             }
 
+			MyUnits = Units.Values.Where(i => i.PlayerId == Me.Id).ToList();
+			foreach (var unit in MyUnits)
+			{
+				unit.Direction = Point.Zero;
+			}
             foreach (var vehicleUpdate in World.VehicleUpdates)
             {
                 if (vehicleUpdate.Durability > 0)
@@ -80,7 +85,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             }
 
 			MyUnits = Units.Values.Where(i => i.PlayerId == Me.Id).ToList();
-
+			
 			Tactic.UpdateFormations();
         }
     }
@@ -189,15 +194,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// 
         /// </summary>
 		public Point Position = new Point(0, 0);
-
+		
         public TerrainType TerrainType;
         public WeatherType WeatherType;
-
-        /// <summary>
-        /// Движется ли юнит. Юнит предположительно неподвижен, если дистанция на которую он передвинулся за ход
-        /// меньше четверти от его скорости.
-        /// </summary>
-        public bool IsMoving { get { return Direction.Distance(Point.Zero) >= Vehicle.MaxSpeed / 4; } }
 
         /// <summary>
         /// Создание юнита
@@ -220,7 +219,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <param name="vehicleUpdate"></param>
         public void Update(VehicleUpdate vehicleUpdate)
         {
-            Direction = new Point(vehicleUpdate.X, vehicleUpdate.Y) - new Point(X, Y);
+			Direction = new Point(vehicleUpdate.X, vehicleUpdate.Y) - new Point(X, Y);
             X = vehicleUpdate.X;
             Y = vehicleUpdate.Y;
             Position.X = X;

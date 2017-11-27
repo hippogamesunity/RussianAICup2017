@@ -22,6 +22,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
 			if ( world.TickIndex == 0 )
 				CreateFormations();
+			else
+				MergeFormations();
 
 			if (world.TickIndex < 0.75 * world.TickCount && !Tactic.EnemyIsWeaker )
             {

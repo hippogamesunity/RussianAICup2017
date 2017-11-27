@@ -63,7 +63,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		public double Density { get {
 			if (Units.Count == 0)
 				return 0;
-			var radius = Rectangle.Center.Distance( Units.OrderBy(i => Rectangle.Center.Distance(i)).Last() );
+			var radius = MassCenter.Distance(Units.OrderBy(i => MassCenter.Distance(i)).Last());
 			var sq = Math.PI * radius * radius;
 			return Units.Count / sq;
 		} }
@@ -86,7 +86,20 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// <summary>
 		/// Флаг, готова ли формация выполнить новый приказ
 		/// </summary>
-		public bool Busy { get { return Global.World.TickIndex < TickIndex; } }
+		public bool Busy { get {
+			if (TickIndex >= 30000)
+			{
+				if (TickIndex + 60 - 30000 > Global.World.TickIndex)
+					return true;
+				foreach (var unit in Units)
+					if ( Math.Abs(unit.Direction.X) > 0 || Math.Abs(unit.Direction.Y) > 0 )
+						return true;
+				TickIndex = Global.World.TickIndex;
+				return false;
+			}
+
+			return Global.World.TickIndex < TickIndex; 
+		} }
 
         /// <summary>
         /// Создание группы на основе типа юнитов
@@ -127,36 +140,20 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// </summary>
         /// <param name="X"></param>
         /// <param name="Y"></param>
-		public void MoveTo(double X, double Y, int WaitDuringTicks = 20000, double MaxSpeed = 0)
+		public void MoveTo(double X, double Y, int WaitDuringTicks = 30000, double MaxSpeed = 0)
         {
-            // Дистанция до цели
-            double dist = MassCenter.Distance(X, Y);
-			if (MaxSpeed > 0)
-				dist /= MaxSpeed;
-			else
-				dist /= 0.6;
-			int tickIndex = (int)(dist * 1.1);
-
-			if ( tickIndex > WaitDuringTicks )
-				tickIndex = WaitDuringTicks;
-
             // Перемещение группы по заданному вектору. Группа задает расчетное время ( расстояние * константа ) за которое она переместится. Пока это время
             // не истечет, группа не будет получать новых приказов (за исключением urgent)
-            Command.MoveRelative(X, Y, this, tickIndex, MaxSpeed);
+			Command.MoveRelative(X, Y, this, WaitDuringTicks, MaxSpeed);
         }
 
         /// <summary>
         /// Масштабирование группы
         /// </summary>
         /// <param name="value"></param>
-		public void Scale(double value, int WaitDuringTicks = 20000)
+		public void Scale(double value, int WaitDuringTicks = 30000)
         {
-            // Дистанция от центра до угла 
-            double dist = Rectangle.Center.Distance( Rectangle.LeftTop );
-			int tickIndex = (int)(dist * 1.5 * value);
-			if ( tickIndex > WaitDuringTicks )
-				tickIndex = WaitDuringTicks;
-            Command.ScaleRelative(value, this, tickIndex);
+			Command.ScaleRelative(value, this, WaitDuringTicks);
         }
 
 		/// <summary>

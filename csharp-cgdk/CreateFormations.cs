@@ -7,12 +7,15 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
 	public partial class MyStrategy
 	{
+		static Formation rightFormation, leftFormation, middleFormation, mainAviaUnits, addAviaUnits;
+		static bool mergedM2R = false, mergedL2R;
+
 		public void CreateFormations()
 		{
 			#region Формируются эскадрильи
 
-			var mainAviaUnits = Tactic.Fighters;
-			var addAviaUnits = Tactic.Helicopters;
+			mainAviaUnits = Tactic.Fighters;
+			addAviaUnits = Tactic.Helicopters;
 			if (
 				(mainAviaUnits.MassCenter.X == addAviaUnits.MassCenter.X && mainAviaUnits.MassCenter.Y < addAviaUnits.MassCenter.Y) ||
 				(mainAviaUnits.MassCenter.Y == addAviaUnits.MassCenter.Y && mainAviaUnits.MassCenter.X < addAviaUnits.MassCenter.X) ||
@@ -26,6 +29,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			mainAviaUnits.MoveTo(200, 200);
 			mainAviaUnits.Scale(1.7);
 
+			addAviaUnits.TickIndex += 60;
 			addAviaUnits.MoveTo(50, 205);
 			addAviaUnits.Scale(1.7);
 			addAviaUnits.MoveTo(200, 205);
@@ -34,25 +38,35 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
 			#region Формируется пехота
 
-			var rightFormation = Tactic.Tanks;
+			rightFormation = Tactic.Tanks;
 			if (Tactic.Ifvs.MassCenter.X > rightFormation.MassCenter.X)
 				rightFormation = Tactic.Ifvs;
 			if (Tactic.Arrvs.MassCenter.X > rightFormation.MassCenter.X)
 				rightFormation = Tactic.Arrvs;
 
-			var leftFormation = rightFormation == Tactic.Tanks ? Tactic.Ifvs : Tactic.Tanks;
+			leftFormation = rightFormation == Tactic.Tanks ? Tactic.Ifvs : Tactic.Tanks;
 			if (Tactic.Ifvs.MassCenter.Y > leftFormation.MassCenter.Y && rightFormation != Tactic.Ifvs )
 				leftFormation = Tactic.Ifvs;
 			if (Tactic.Arrvs.MassCenter.Y > leftFormation.MassCenter.Y && rightFormation != Tactic.Arrvs)
 				leftFormation = Tactic.Arrvs;
 
-			rightFormation.Scale(0.1);
+			middleFormation = ( rightFormation == Tactic.Tanks || leftFormation == Tactic.Tanks ) ?
+				((rightFormation == Tactic.Ifvs || leftFormation == Tactic.Ifvs) ? Tactic.Arrvs : Tactic.Ifvs ) : Tactic.Tanks;
+
+			rightFormation.Scale(0.8);
 			rightFormation.MoveTo(250, rightFormation.MassCenter.Y);
 			rightFormation.MoveTo(250, 250);
+			rightFormation.Scale(2.5);
 
-			leftFormation.Scale(0.1);
+			leftFormation.Scale(0.8);
 			leftFormation.MoveTo(leftFormation.MassCenter.X, 250);
-			leftFormation.MoveTo(50, 250);
+			leftFormation.MoveTo(30, 240);
+
+			middleFormation.TickIndex += 150;
+			middleFormation.Scale(0.8);
+			middleFormation.MoveTo(110, middleFormation.MassCenter.Y);
+			middleFormation.MoveTo(110, 244);
+			middleFormation.Scale(2.5);
 
 			//Tactic.Tanks.Scale(5);
 			//Tactic.Tanks.MoveTo(250, 250);
@@ -65,6 +79,21 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			//Tactic.Arrvs.Scale(0.4);
 
 			#endregion
+		}
+
+		public void MergeFormations()
+		{
+			if (!mergedM2R && !rightFormation.Busy && !middleFormation.Busy)
+			{
+				middleFormation.MoveTo(250, 244);
+				mergedM2R = true;
+			} 
+			else if (!mergedL2R && !rightFormation.Busy && !middleFormation.Busy && Global.World.TickIndex > 900 )
+			{
+				middleFormation.Scale(0.1);
+				rightFormation.Scale(0.1);
+				mergedM2R = true;
+			}
 		}
 	}
 }

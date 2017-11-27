@@ -9,7 +9,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
     {
         private void NuclearStrike()
         {
-            if (Global.Me.NextNuclearStrikeTickIndex == -1 && Global.Me.RemainingNuclearStrikeCooldownTicks == 0 && Global.World.TickIndex % 30 == 0)
+            if (Global.Me.RemainingNuclearStrikeCooldownTicks == 0 && Global.World.TickIndex % 30 == 0)
             {
                 var myUnits = Global.Units.Values.Where(i => i.PlayerId == Global.Me.Id).ToList();
                 var enemyUnits = Global.Units.Values.Where(i => i.PlayerId != Global.Me.Id).ToList();
@@ -48,8 +48,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                     var visor = myUnits.Where(i => i.CanSee(target, 0.85)).OrderBy(i => i.Distance(target)).Last(); // gap компенсирует последующее движение юнитов
 
                     var affectedEnemies = Global.Units.Values.Where(i => i.PlayerId != Global.Me.Id && i.Distance(target) < Global.Game.TacticalNuclearStrikeRadius).ToList();
-                    var direction = new Position(affectedEnemies.Average(i => i.Direction.X), affectedEnemies.Average(i => i.Direction.Y));
-                    var prediction = new Position(30 * direction.X, 30 * direction.Y);
+                    var direction = new Point(affectedEnemies.Average(i => i.Direction.X), affectedEnemies.Average(i => i.Direction.Y));
+					var prediction = new Point(30 * direction.X, 30 * direction.Y);
 
                     Global.ActionQueue.Add(new Action
                     {
