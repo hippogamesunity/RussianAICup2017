@@ -186,6 +186,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         public Point Direction;
 
         /// <summary>
+        /// 
+        /// </summary>
+        public Position Position = new Position(0, 0);
+
+        public TerrainType TerrainType;
+        public WeatherType WeatherType;
+
+        /// <summary>
         /// Движется ли юнит. Юнит предположительно неподвижен, если дистанция на которую он передвинулся за ход
         /// меньше четверти от его скорости.
         /// </summary>
@@ -215,7 +223,75 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             Direction = new Point(vehicleUpdate.X, vehicleUpdate.Y) - new Point(X, Y);
             X = vehicleUpdate.X;
             Y = vehicleUpdate.Y;
+            Position.X = X;
+            Position.Y = Y;
+            TerrainType = Global.World.TerrainByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)];
+            WeatherType = Global.World.WeatherByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)];
             Durability = vehicleUpdate.Durability;
+        }
+
+        public double Distance(VehicleWrapper target)
+        {
+            return Position.Distance(target.Position);
+        }
+
+        public bool CanSee(VehicleWrapper target, double gap = 1) // 2.4 Типы местности и погоды
+        {
+            return Position.Distance(target.Position) <= gap * Vehicle.VisionRange * VisionFactor * target.StealthFactor;
+        }
+
+        public double VisionFactor
+        {
+            get
+            {
+                if (Vehicle.Type == VehicleType.Tank || Vehicle.Type == VehicleType.Ifv || Vehicle.Type == VehicleType.Arrv)
+                {
+                    switch (TerrainType)
+                    {
+                        case TerrainType.Forest: return Global.Game.ForestTerrainVisionFactor;
+                        case TerrainType.Plain: return Global.Game.PlainTerrainVisionFactor;
+                        case TerrainType.Swamp: return Global.Game.SwampTerrainVisionFactor;
+                    }
+                }
+                else
+                {
+                    switch (WeatherType)
+                    {
+                        case WeatherType.Clear: return Global.Game.ClearWeatherVisionFactor;
+                        case WeatherType.Cloud: return Global.Game.CloudWeatherVisionFactor;
+                        case WeatherType.Rain: return Global.Game.RainWeatherVisionFactor;
+                    }
+                }
+
+                return 1;
+            }
+        }
+
+        public double StealthFactor
+        {
+            get
+            {
+                if (Vehicle.Type == VehicleType.Tank || Vehicle.Type == VehicleType.Ifv || Vehicle.Type == VehicleType.Arrv)
+                {
+                    switch (TerrainType)
+                    {
+                        case TerrainType.Forest: return Global.Game.ForestTerrainStealthFactor;
+                        case TerrainType.Plain: return Global.Game.PlainTerrainStealthFactor;
+                        case TerrainType.Swamp: return Global.Game.SwampTerrainStealthFactor;
+                    }
+                }
+                else
+                {
+                    switch (WeatherType)
+                    {
+                        case WeatherType.Clear: return Global.Game.ClearWeatherStealthFactor;
+                        case WeatherType.Cloud: return Global.Game.CloudWeatherStealthFactor;
+                        case WeatherType.Rain: return Global.Game.RainWeatherStealthFactor;
+                    }
+                }
+
+                return 1;
+            }
         }
     }
 }

@@ -1,32 +1,44 @@
 ﻿using System;
-using System.Security.Cryptography;
-using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
-	public class Helpers
-	{
-		
-		private static Point Middle(Player player)
-		{
-			var units = Global.Units.Values.Where(i => i.PlayerId == player.Id).ToList();
+    public class Position
+    {
+        public double X;
+        public double Y;
 
-			return new Point(units.Average(i => i.X), units.Average(i => i.Y));
-		}
+        public static Position Zero => new Position(0, 0);
 
-		private double GetDistance(VehicleWrapper from, VehicleWrapper to)
-		{
-			var x = to.X - from.X;
-			var y = to.Y - from.Y;
+        public Position(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
 
-			return Math.Sqrt(x * x + y * y);
-		}
+        public double Distance(Position other)
+        {
+            var x = X - other.X;
+            var y = Y - other.Y;
 
-		private double GetRandom(double min, double max)
-		{
-			return CRandom.GetRandom((int)(min * 1000), (int)(max * 1000)) / 1000d;
-		}
-	}
+            return Math.Sqrt(x * x + y * y);
+        }
+
+        public double Distance(VehicleWrapper unit)
+        {
+            var x = X - unit.X;
+            var y = Y - unit.Y;
+
+            return Math.Sqrt(x * x + y * y);
+        }
+
+        public static Position operator +(Position a, Position b)
+        {
+            return new Position(a.X + b.X, a.Y + b.Y);
+        }
+
+        public static Position operator -(Position a, Position b)
+        {
+            return new Position(a.X - b.X, a.Y - b.Y);
+        }
+    }
 }
