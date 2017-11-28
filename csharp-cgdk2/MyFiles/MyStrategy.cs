@@ -24,7 +24,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         
         private void Logic()
         {
-            if (EvadeNuclearStrike() || NuclearStrike() || Global.Me.RemainingActionCooldownTicks > 0) return;
+            if (EvadeNuclearStrike() || NuclearStrike() || Global.ActionQueue.Any()) return;
 
             SelectRandomAI();
         }
