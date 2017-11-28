@@ -28,7 +28,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
             foreach (var type in new[] { VehicleType.Tank, VehicleType.Ifv, VehicleType.Helicopter, VehicleType.Fighter })
             {
-                units = Global.EnemyUnits.Where(i => i.Type == type).ToList();
+                units = Global.MyUnits.Where(i => i.Type == type).ToList();
 
                 if (units.Any()) break;
             }

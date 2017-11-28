@@ -23,8 +23,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         
         private void Logic()
         {
-            if (NuclearStrike()) return;
-
+            if (EvadeNuclearStrike() || NuclearStrike()) return;
             if (Global.World.TickIndex % 12 > 0 || _busy-- > 0) return;
 
             var queueIndex = _index++ % 9; // F H T F H I F H A

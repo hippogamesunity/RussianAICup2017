@@ -72,15 +72,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionQueue.cs" />
-    <Compile Include="Common.cs" />
-    <Compile Include="Arrvs.cs" />
-    <Compile Include="Ifvs.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="Tanks.cs" />
-    <Compile Include="Helicopters.cs" />
-    <Compile Include="Fighters.cs" />
-    <Compile Include="Helpers.cs" />
+    <Compile Include="MyFiles\ActionQueue.cs" />
+    <Compile Include="MyFiles\Common.cs" />
+    <Compile Include="MyFiles\Arrvs.cs" />
+    <Compile Include="MyFiles\EvadeNuclearStrike.cs" />
+    <Compile Include="MyFiles\Ifvs.cs" />
+    <Compile Include="MyFiles\Node.cs" />
+    <Compile Include="MyFiles\Tanks.cs" />
+    <Compile Include="MyFiles\Helicopters.cs" />
+    <Compile Include="MyFiles\Fighters.cs" />
+    <Compile Include="MyFiles\Helpers.cs" />
     <Compile Include="Model\ActionType.cs" />
     <Compile Include="Model\CircularUnit.cs" />
     <Compile Include="Model\Facility.cs" />
@@ -97,10 +98,10 @@
     <Compile Include="Model\WeatherType.cs" />
     <Compile Include="Model\World.cs" />
     <Compile Include="IStrategy.cs" />
-    <Compile Include="MyStrategy.cs" />
-    <Compile Include="Actions.cs" />
-    <Compile Include="NuclearStrike.cs" />
-    <Compile Include="Position.cs" />
+    <Compile Include="MyFiles\MyStrategy.cs" />
+    <Compile Include="MyFiles\Actions.cs" />
+    <Compile Include="MyFiles\NuclearStrike.cs" />
+    <Compile Include="MyFiles\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteProcessClient.cs" />
     <Compile Include="Runner.cs" />
