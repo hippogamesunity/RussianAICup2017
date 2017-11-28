@@ -12,9 +12,21 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             return units.OrderBy(i => i.Distance(middle)).First().Position;
         }
 
+        public static Position FindNearest(List<VehicleWrapper> units, Position position)
+        {
+            return units.OrderBy(i => i.Distance(position)).First().Position;
+        }
+
         public static Position GetCenter(List<VehicleWrapper> units)
         {
             return new Position(units.Average(i => i.X), units.Average(i => i.Y));
+        }
+
+        public static double GetLag(List<VehicleWrapper> units)
+        {
+            var center = GetCenter(units);
+
+            return units.OrderBy(i => i.Distance(center)).Last().Position.Distance(center);
         }
     }
 }

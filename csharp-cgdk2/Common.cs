@@ -72,7 +72,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         public long PlayerId;
         public Vehicle Vehicle;
         public Position Direction;
-        public Position Position = new Position(0, 0);
+        public Position Position;
         public TerrainType TerrainType;
         public WeatherType WeatherType;
 
@@ -92,7 +92,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         public void Update(VehicleUpdate vehicleUpdate)
         {
-            Direction = new Position(vehicleUpdate.X, vehicleUpdate.Y) - new Position(X, Y);
+            Direction = new Position(vehicleUpdate.X - X, vehicleUpdate.Y - Y);
             X = vehicleUpdate.X;
             Y = vehicleUpdate.Y;
             Position.X = X;

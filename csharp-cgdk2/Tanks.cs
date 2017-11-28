@@ -13,13 +13,20 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         public override int Update()
         {
-            var myUnits = Global.MyUnits.Where(i => i.Type == VehicleType.Tank).ToList();
+            var myTanks = Global.MyUnits.Where(i => i.Type == VehicleType.Tank).ToList();
 
-            if (myUnits.Count == 0) return 0;
+            if (myTanks.Count == 0) return 0;
+
+            if (Helpers.GetLag(myTanks) > 50) // Если застряли или растянулись, то сжимаемся
+            {
+                var actions = Compress(myTanks);
+
+                if (actions > 0) return actions;
+            }
 
             var enemyUnits = new List<VehicleWrapper>();
 
-            foreach (var type in new[] { VehicleType.Ifv, VehicleType.Tank, VehicleType.Ifv })
+            foreach (var type in new[] { VehicleType.Ifv, VehicleType.Tank, VehicleType.Arrv, VehicleType.Fighter, VehicleType.Helicopter })
             {
                 enemyUnits = Global.EnemyUnits.Where(i => i.Type == type).ToList();
 
@@ -29,9 +36,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             if (enemyUnits.Count == 0) return 0;
 
             var target = Helpers.FindTarget(enemyUnits);
-            var offset = target - Helpers.GetCenter(myUnits);
+            var offset = target - Helpers.GetCenter(myTanks);
 
-            Actions.SelectAll(VehicleType.Tank);
+            Actions.SelectAll(myTanks[0].Type);
             Actions.Move(offset);
 
             return 2;

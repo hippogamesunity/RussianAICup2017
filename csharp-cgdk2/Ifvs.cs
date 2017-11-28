@@ -13,9 +13,16 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         public override int Update()
         {
-            var myUnits = Global.MyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
+            var myIfvs = Global.MyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
 
-            if (myUnits.Count == 0) return 0;
+            if (myIfvs.Count == 0) return 0;
+
+            if (Helpers.GetLag(myIfvs) > 50) // Если застряли или растянулись, то сжимаемся
+            {
+                var actions = Compress(myIfvs);
+
+                if (actions > 0) return actions;
+            }
 
             var enemyUnits = new List<VehicleWrapper>();
 
@@ -29,9 +36,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             if (enemyUnits.Count == 0) return 0;
 
             var target = Helpers.FindTarget(enemyUnits);
-            var offset = target - Helpers.GetCenter(myUnits);
+            var offset = target - Helpers.GetCenter(myIfvs);
 
-            Actions.SelectAll(VehicleType.Ifv);
+            Actions.SelectAll(myIfvs[0].Type);
             Actions.Move(offset);
 
             return 2;
