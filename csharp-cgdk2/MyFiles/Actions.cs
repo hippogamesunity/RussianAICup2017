@@ -6,9 +6,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
     public static class Actions
     {
-        public static void SelectAll(VehicleType type)
+        public static void SelectByType(VehicleType type)
         {
             Global.ActionQueue.Add(new Action { Action = ActionType.ClearAndSelect, Right = Global.World.Width, Bottom = Global.World.Height, VehicleType = type });
+        }
+
+        public static void SelectByGroup(int group)
+        {
+            Global.ActionQueue.Add(new Action { Action = ActionType.ClearAndSelect, Right = Global.World.Width, Bottom = Global.World.Height, Group = group });
         }
 
         public static void SelectAll()

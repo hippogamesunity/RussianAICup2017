@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
@@ -8,11 +9,14 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         private int _index;
         private int _busy;
 
-        private readonly Fighters _fighters = new Fighters();
-        private readonly Helicopters _helicopters = new Helicopters();
-        private readonly Tanks _tanks = new Tanks();
-        private readonly Ifvs _ifvs = new Ifvs();
-        private readonly Arrvs _arrvs = new Arrvs();
+        private List<AI> _groups = new List<AI>
+        {
+            new AIFighters { Frequency = 6 },
+            new AIHelicopters { Frequency = 6 },
+            new AITanks { Frequency = 2 },
+            new AIIfvs { Frequency = 2 },
+            new AIArrvs { Frequency = 1 }
+        };
 
         public void Move(Player me, World world, Game game, Move move)
         {
@@ -26,15 +30,33 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             if (EvadeNuclearStrike() || NuclearStrike()) return;
             if (Global.World.TickIndex % 12 > 0 || _busy-- > 0) return;
 
-            var queueIndex = _index++ % 9; // F H T F H I F H A
+            SelectRandomAI();
+        }
 
-            foreach (var node in new List<Node> { _fighters, _helicopters, _tanks, _ifvs, _arrvs })
+        private void SelectRandomAI()
+        {
+            for (var i = 0; i < 10; i++) // Повторяем несколько раз на случай, если выбранный AI будет бездействовать
             {
-                if (node.QueueIndex().Contains(queueIndex))
-                {
-                    _busy += node.Update();
+                var frequencySum = _groups.Sum(j => j.Frequency);
+                var random = CRandom.GetRandom(frequencySum);
+                var offset = 0;
 
-                    if (_busy > 0) return;
+                foreach (var group in _groups)
+                {
+                    if (random < group.Frequency + offset)
+                    {
+                        var actions = group.PerformActions();
+
+                        if (actions > 0)
+                        {
+                            _busy += actions;
+                            return;
+                        }
+
+                        break;
+                    }
+
+                    offset += group.Frequency;
                 }
             }
         }

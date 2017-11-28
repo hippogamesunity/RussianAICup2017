@@ -4,20 +4,20 @@ using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
-    public class Tanks : Node
+    public class AITanks : AI
     {
-        public override List<int> QueueIndex()
+        public AITanks()
         {
-            return new List<int> { 2 };
+            VehicleType = VehicleType.Tank;
         }
 
-        public override int Update()
+        public override int PerformActions()
         {
             var myTanks = Global.MyUnits.Where(i => i.Type == VehicleType.Tank).ToList();
 
             if (myTanks.Count == 0) return 0;
 
-            if (Helpers.GetLag(myTanks) > 50) // Если застряли или растянулись, то сжимаемся
+            if (Helpers.GetLag(myTanks) > 60) // Если застряли или растянулись, то сжимаемся
             {
                 var actions = Compress(myTanks);
 
@@ -38,7 +38,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             var target = Helpers.FindTarget(enemyUnits);
             var offset = target - Helpers.GetCenter(myTanks);
 
-            Actions.SelectAll(myTanks[0].Type);
+            SelectGroup();
             Actions.Move(offset);
 
             return 2;

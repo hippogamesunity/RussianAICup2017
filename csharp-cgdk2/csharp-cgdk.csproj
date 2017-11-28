@@ -74,13 +74,13 @@
   <ItemGroup>
     <Compile Include="MyFiles\ActionQueue.cs" />
     <Compile Include="MyFiles\Common.cs" />
-    <Compile Include="MyFiles\Arrvs.cs" />
+    <Compile Include="MyFiles\AIArrvs.cs" />
     <Compile Include="MyFiles\EvadeNuclearStrike.cs" />
-    <Compile Include="MyFiles\Ifvs.cs" />
-    <Compile Include="MyFiles\Node.cs" />
-    <Compile Include="MyFiles\Tanks.cs" />
-    <Compile Include="MyFiles\Helicopters.cs" />
-    <Compile Include="MyFiles\Fighters.cs" />
+    <Compile Include="MyFiles\AIIfvs.cs" />
+    <Compile Include="MyFiles\AI.cs" />
+    <Compile Include="MyFiles\AITanks.cs" />
+    <Compile Include="MyFiles\AIHelicopters.cs" />
+    <Compile Include="MyFiles\AIFighters.cs" />
     <Compile Include="MyFiles\Helpers.cs" />
     <Compile Include="Model\ActionType.cs" />
     <Compile Include="Model\CircularUnit.cs" />

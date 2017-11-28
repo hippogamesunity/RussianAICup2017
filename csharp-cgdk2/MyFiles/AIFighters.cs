@@ -4,20 +4,20 @@ using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
-    public class Fighters : Node
+    public class AIFighters : AI
     {
-        public override List<int> QueueIndex()
+        public AIFighters()
         {
-            return new List<int> { 0, 3, 6 };
+            VehicleType = VehicleType.Fighter;
         }
 
-        public override int Update()
+        public override int PerformActions()
         {
             var myFighters = Global.MyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
 
             if (myFighters.Count == 0) return 0;
 
-            if (Helpers.GetLag(myFighters) > 50) // Если застряли или растянулись, то сжимаемся
+            if (Helpers.GetLag(myFighters) > 60) // Если застряли или растянулись, то сжимаемся
             {
                 var actions = Compress(myFighters);
 
@@ -29,38 +29,44 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             return attackActions > 0 ? attackActions : DefaultBehaviour(myFighters);
         }
 
-        private static int DefaultBehaviour(List<VehicleWrapper> myFighters) // Прикрываем своих
+        private int DefaultBehaviour(List<VehicleWrapper> myFighters) // Прикрываем своих
         {
             var myTanks = Global.MyUnits.Where(i => i.Type == VehicleType.Tank).ToList();
 
-            Actions.SelectAll(myFighters[0].Type);
+            SelectGroup();
             Actions.Move(Helpers.GetCenter(myTanks) - Helpers.GetCenter(myFighters));
 
             return 2;
         }
 
-        private static int Attack(List<VehicleWrapper> myFighters)
+        private int Attack(List<VehicleWrapper> myFighters)
         {
-            // Далее наша задача - уничтожить вертолеты, когда они не прикрываются самолетами или БТР
+            // Главная задача - уничтожить вертолеты, когда они не прикрываются самолетами или БТР
+            // Второстепенная задача - уничтожить самолеты, когда они не прикрываются БТР
             // Иначе - поведение по уполчанию
             // Важное допущение - предполагаем, что соперник не поделил начальные формации на отряды. Иначе нужно определить эти отряды и анализировать их!
 
-            var enemyHelicopters = Global.EnemyUnits.Where(i => i.Type == VehicleType.Helicopter).ToList();
+            var targets = Global.EnemyUnits.Where(i => i.Type == VehicleType.Helicopter).ToList();
 
-            if (enemyHelicopters.Count == 0) return 0;
+            if (targets.Count == 0)
+            {
+                targets = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
+
+                if (targets.Count == 0) return 0;
+            }
 
             var enemyFighters = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
             var enemyIfvs = Global.EnemyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
             var dangers = new List<List<VehicleWrapper>>();
 
-            if (enemyFighters.Any()) dangers.Add(enemyFighters);
-            if (enemyIfvs.Any()) dangers.Add(enemyIfvs);
+            if (enemyFighters.Any() && targets[0].Type != enemyFighters[0].Type) dangers.Add(enemyFighters);
+            if (enemyIfvs.Any() && targets[0].Type != enemyIfvs[0].Type) dangers.Add(enemyIfvs);
 
             // Атаковать можно, если мы прилетим к цели быстрее + у нас будет время на уничтожение целей
             // Пока не учитываем тип местрости и погоду
 
             var myCenter = Helpers.GetCenter(myFighters);
-            var targetPosition = Helpers.FindNearest(enemyHelicopters, myCenter); // Пока ориентируемся по ближайшему юниту
+            var targetPosition = Helpers.FindNearest(targets, myCenter); // Пока ориентируемся по ближайшему юниту
             var myTime = targetPosition.Distance(myCenter) / myFighters[0].Vehicle.MaxSpeed;
             var safety = true;
             var destroyTime = 4; // Нужно оценить, исходя из количества нашей и вражеской техники
@@ -79,7 +85,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
             if (safety) // Можем атаковать
             {
-                Actions.SelectAll(myFighters[0].Type);
+                SelectGroup();
                 Actions.Move(targetPosition - myCenter);
 
                 return 2;

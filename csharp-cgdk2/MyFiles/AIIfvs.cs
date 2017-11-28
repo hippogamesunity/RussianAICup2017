@@ -4,20 +4,20 @@ using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
-    public class Ifvs : Node
+    public class AIIfvs : AI
     {
-        public override List<int> QueueIndex()
+        public AIIfvs()
         {
-            return new List<int> { 5 };
+            VehicleType = VehicleType.Ifv;
         }
 
-        public override int Update()
+        public override int PerformActions()
         {
             var myIfvs = Global.MyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
 
             if (myIfvs.Count == 0) return 0;
 
-            if (Helpers.GetLag(myIfvs) > 50) // Если застряли или растянулись, то сжимаемся
+            if (Helpers.GetLag(myIfvs) > 60) // Если застряли или растянулись, то сжимаемся
             {
                 var actions = Compress(myIfvs);
 
@@ -38,7 +38,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             var target = Helpers.FindTarget(enemyUnits);
             var offset = target - Helpers.GetCenter(myIfvs);
 
-            Actions.SelectAll(myIfvs[0].Type);
+            SelectGroup();
             Actions.Move(offset);
 
             return 2;
