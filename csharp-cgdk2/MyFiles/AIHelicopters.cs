@@ -27,10 +27,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         private bool DefaultBehaviour(List<VehicleWrapper> myHelicopters) // Прикрываем своих
         {
-            var myIfv = Global.MyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
+            var targets = Global.MyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
+
+            if (targets.Count == 0) return false;
 
             SelectGroup();
-            Actions.Move(Helpers.GetCenter(myIfv) - Helpers.GetCenter(myHelicopters));
+            Actions.Move(Helpers.GetCenter(targets) - Helpers.GetCenter(myHelicopters));
 
             return true;
         }
@@ -72,7 +74,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 var position = Helpers.FindNearest(danger, targetPosition); // Пока ориентируемся по ближайшему юниту
                 var time = targetPosition.Distance(position) / danger[0].Vehicle.MaxSpeed;
 
-                if (myTime > time + destroyTime)
+                if (position.Distance(myCenter) < 250 && myTime > time + destroyTime)
                 {
                     safety = false;
                     break;

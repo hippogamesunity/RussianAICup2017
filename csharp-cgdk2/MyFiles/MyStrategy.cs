@@ -6,9 +6,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
     public sealed partial class MyStrategy : IStrategy
     {
-        private int _index;
-
-        private List<AI> _groups = new List<AI>
+        private readonly List<AI> _groups = new List<AI>
         {
             new AIFighters { Frequency = 6 },
             new AIHelicopters { Frequency = 6 },

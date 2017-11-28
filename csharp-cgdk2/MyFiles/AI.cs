@@ -46,7 +46,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                     return true;
                 case 1:
                     SelectGroup();
-                    Actions.Rotate(Math.PI * (CRandom.Chance(50) ? 1 : -1), Helpers.GetCenter(units));
+                    Actions.Rotate(Math.PI, Helpers.GetCenter(units));
                     return true;
                 case 2:
                     SelectGroup();
