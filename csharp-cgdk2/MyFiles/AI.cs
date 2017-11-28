@@ -28,7 +28,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             }
         }
 
-        private int _index; // Чтобы не зацикливаться не выполняем сжатие 2 раза подряд
+        private int _index;
 
         /// <summary>
         /// Чередование сжатия, вращения и бездействия обеспечивает скучивание групп даже из урагана (но это не точно).
