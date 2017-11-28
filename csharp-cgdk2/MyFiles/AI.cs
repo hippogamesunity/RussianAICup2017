@@ -13,8 +13,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <summary>
         /// Выполняет произвольные действия для своей группы
         /// </summary>
-        /// <returns>Количество выполненных действий</returns>
-        public abstract int PerformActions();
+        /// <returns>Возвращает false, если AI пропускает действие</returns>
+        public abstract bool PerformActions();
 
         protected void SelectGroup()
         {
@@ -34,7 +34,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// Чередование сжатия, вращения и бездействия обеспечивает скучивание групп даже из урагана (но это не точно).
         /// Если делать одно только сжатие, то возможно зацикливание, если юниты растянуты в линию.
         /// </summary>
-        protected int Compress(List<VehicleWrapper> units)
+        protected bool Compress(List<VehicleWrapper> units)
         {
             SelectGroup();
 
@@ -43,21 +43,18 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 case 0:
                     SelectGroup();
                     Actions.Scale(0.5, Helpers.GetCenter(units));
-                    return 2;
+                    return true;
                 case 1:
                     SelectGroup();
                     Actions.Rotate(Math.PI * (CRandom.Chance(50) ? 1 : -1), Helpers.GetCenter(units));
-                    return 2;
+                    return true;
                 case 2:
                     SelectGroup();
                     Actions.Scale(0.5, Helpers.GetCenter(units));
-                    return 2;
-                case 3:
-                case 4:
-                    return 0;
+                    return true;
+                default:
+                    return false;
             }
-
-            return 0;
         }
     }
 }

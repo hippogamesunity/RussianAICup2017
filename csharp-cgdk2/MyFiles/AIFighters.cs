@@ -11,35 +11,31 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             VehicleType = VehicleType.Fighter;
         }
 
-        public override int PerformActions()
+        public override bool PerformActions()
         {
             var myFighters = Global.MyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
 
-            if (myFighters.Count == 0) return 0;
+            if (myFighters.Count == 0) return false;
 
-            if (Helpers.GetLag(myFighters) > 60) // Если застряли или растянулись, то сжимаемся
+            if (Helpers.GetLag(myFighters) > 60 && Compress(myFighters)) // Если застряли или растянулись, то сжимаемся
             {
-                var actions = Compress(myFighters);
-
-                if (actions > 0) return actions;
+                return true;
             }
 
-            var attackActions = Attack(myFighters);
-
-            return attackActions > 0 ? attackActions : DefaultBehaviour(myFighters);
+            return Attack(myFighters) || DefaultBehaviour(myFighters);
         }
 
-        private int DefaultBehaviour(List<VehicleWrapper> myFighters) // Прикрываем своих
+        private bool DefaultBehaviour(List<VehicleWrapper> myFighters) // Прикрываем своих
         {
             var myTanks = Global.MyUnits.Where(i => i.Type == VehicleType.Tank).ToList();
 
             SelectGroup();
             Actions.Move(Helpers.GetCenter(myTanks) - Helpers.GetCenter(myFighters));
 
-            return 2;
+            return true;
         }
 
-        private int Attack(List<VehicleWrapper> myFighters)
+        private bool Attack(List<VehicleWrapper> myFighters)
         {
             // Главная задача - уничтожить вертолеты, когда они не прикрываются самолетами или БТР
             // Второстепенная задача - уничтожить самолеты, когда они не прикрываются БТР
@@ -52,7 +48,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             {
                 targets = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
 
-                if (targets.Count == 0) return 0;
+                if (targets.Count == 0) return false;
             }
 
             var enemyFighters = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
@@ -88,10 +84,10 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 SelectGroup();
                 Actions.Move(targetPosition - myCenter);
 
-                return 2;
+                return true;
             }
 
-            return 0;
+            return false;
         }
     }
 }

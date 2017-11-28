@@ -11,37 +11,35 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             VehicleType = VehicleType.Ifv;
         }
 
-        public override int PerformActions()
+        public override bool PerformActions()
         {
             var myIfvs = Global.MyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
 
-            if (myIfvs.Count == 0) return 0;
+            if (myIfvs.Count == 0) return false;
 
-            if (Helpers.GetLag(myIfvs) > 60) // Если застряли или растянулись, то сжимаемся
+            if (Helpers.GetLag(myIfvs) > 60 && Compress(myIfvs)) // Если застряли или растянулись, то сжимаемся
             {
-                var actions = Compress(myIfvs);
-
-                if (actions > 0) return actions;
+                return true;
             }
 
-            var enemyUnits = new List<VehicleWrapper>();
+            var targets = new List<VehicleWrapper>();
 
             foreach (var type in new[] { VehicleType.Helicopter, VehicleType.Fighter, VehicleType.Ifv, VehicleType.Tank, VehicleType.Arrv })
             {
-                enemyUnits = Global.EnemyUnits.Where(i => i.Type == type).ToList();
+                targets = Global.EnemyUnits.Where(i => i.Type == type).ToList();
 
-                if (enemyUnits.Any()) break;
+                if (targets.Any()) break;
             }
 
-            if (enemyUnits.Count == 0) return 0;
+            if (targets.Count == 0) return false;
 
-            var target = Helpers.FindTarget(enemyUnits);
+            var target = Helpers.FindTarget(targets);
             var offset = target - Helpers.GetCenter(myIfvs);
 
             SelectGroup();
             Actions.Move(offset);
 
-            return 2;
+            return true;
         }
     }
 }

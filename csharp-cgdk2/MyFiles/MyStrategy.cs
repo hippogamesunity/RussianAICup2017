@@ -7,7 +7,6 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
     public sealed partial class MyStrategy : IStrategy
     {
         private int _index;
-        private int _busy;
 
         private List<AI> _groups = new List<AI>
         {
@@ -27,8 +26,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         
         private void Logic()
         {
-            if (EvadeNuclearStrike() || NuclearStrike()) return;
-            if (Global.World.TickIndex % 12 > 0 || _busy-- > 0) return;
+            if (EvadeNuclearStrike() || NuclearStrike() || Global.Me.RemainingActionCooldownTicks > 0) return;
 
             SelectRandomAI();
         }
@@ -45,14 +43,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 {
                     if (random < group.Frequency + offset)
                     {
-                        var actions = group.PerformActions();
-
-                        if (actions > 0)
-                        {
-                            _busy += actions;
-                            return;
-                        }
-
+                        if (group.PerformActions()) return;
+                        
                         break;
                     }
 
