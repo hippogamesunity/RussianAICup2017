@@ -58,7 +58,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             var dangers = new List<List<VehicleWrapper>>();
 
             if (enemyFighters.Any() && targets[0].Type != enemyFighters[0].Type) dangers.Add(enemyFighters);
-            if (enemyIfvs.Any() && targets[0].Type != enemyIfvs[0].Type) dangers.Add(enemyIfvs);
+            if (enemyIfvs.Any() && targets[0].Type != enemyIfvs[0].Type && enemyIfvs.Sum(i => i.Durability) > myHelicopters.Sum(i => i.Durability)) dangers.Add(enemyIfvs);
 
             // Атаковать можно, если мы прилетим к цели быстрее + у нас будет время на уничтожение целей
             // Пока не учитываем тип местрости и погоду
@@ -83,8 +83,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
             if (safety) // Можем атаковать
             {
+                var offset = targetPosition - myCenter;
+
+                offset -= 0.75 * offset.Normalized * myHelicopters[0].Vehicle.GroundAttackRange;
+
                 SelectGroup();
-                Actions.Move(targetPosition - myCenter);
+                Actions.Move(offset);
 
                 return true;
             }

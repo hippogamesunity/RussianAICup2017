@@ -8,18 +8,50 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
     {
         private readonly List<AI> _groups = new List<AI>
         {
-            new AIFighters { Frequency = 6 },
-            new AIHelicopters { Frequency = 6 },
+            new AIFighters { Frequency = 8 },
+            new AIHelicopters { Frequency = 8 },
             new AITanks { Frequency = 2 },
             new AIIfvs { Frequency = 2 },
             new AIArrvs { Frequency = 1 }
         };
 
+        private List<Position> _aviaSpots = new List<Position> { new Position(45, 193), new Position(193, 45) }; 
+
         public void Move(Player me, World world, Game game, Move move)
         {
             Global.Update(me, world, game, move);
-            Logic();
+
+            if (Global.World.TickIndex < 240)
+            {
+                if (Global.World.TickIndex == 0)
+                {
+                    var centerF = Helpers.GetCenter(VehicleType.Fighter);
+                    var centerH = Helpers.GetCenter(VehicleType.Helicopter);
+                    var targetF = _aviaSpots.OrderBy(i => i.Distance(centerF)).First();
+                    var targetH = _aviaSpots.Single(i => i != targetF);
+
+                    Actions.SelectByType(VehicleType.Fighter);
+                    Actions.Move(targetF - centerF);
+                    Actions.SelectByType(VehicleType.Helicopter);
+                    Actions.Move(targetH - centerH);
+                }
+            }
+            else
+            {
+                Logic();
+            }
+
             Global.ActionQueue.Process();
+        }
+
+        private void MoveToLine(Position center, VehicleType vehicleType)
+        {
+            var offset = center - new Position(119, 119);
+
+            if (offset.X == 0 && offset.Y == 0) return;
+
+            Actions.SelectByType(vehicleType);
+            Actions.Move(offset);
         }
         
         private void Logic()

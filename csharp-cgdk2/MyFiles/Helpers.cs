@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 {
@@ -20,6 +21,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         public static Position GetCenter(List<VehicleWrapper> units)
         {
             return new Position(units.Average(i => i.X), units.Average(i => i.Y));
+        }
+
+        public static Position GetCenter(VehicleType vehicleType)
+        {
+            return GetCenter(Global.MyUnits.Where(i => i.Type == vehicleType).ToList());
         }
 
         public static double GetLag(List<VehicleWrapper> units)

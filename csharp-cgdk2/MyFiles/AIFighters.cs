@@ -39,26 +39,20 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
         private bool Attack(List<VehicleWrapper> myFighters)
         {
-            // Главная задача - уничтожить вертолеты, когда они не прикрываются самолетами или БТР
-            // Второстепенная задача - уничтожить самолеты, когда они не прикрываются БТР
+            // Главная задача - уничтожить самолеты и вертолеты, когда они не прикрываются БТР
             // Иначе - поведение по уполчанию
             // Важное допущение - предполагаем, что соперник не поделил начальные формации на отряды. Иначе нужно определить эти отряды и анализировать их!
 
-            var targets = Global.EnemyUnits.Where(i => i.Type == VehicleType.Helicopter).ToList();
+            var targets = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter || i.Type == VehicleType.Helicopter).ToList();
+            
+            if (targets.Count == 0) return false;
 
-            if (targets.Count == 0)
-            {
-                targets = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
-
-                if (targets.Count == 0) return false;
-            }
-
-            var enemyFighters = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
+            //var enemyFighters = Global.EnemyUnits.Where(i => i.Type == VehicleType.Fighter).ToList();
             var enemyIfvs = Global.EnemyUnits.Where(i => i.Type == VehicleType.Ifv).ToList();
             var dangers = new List<List<VehicleWrapper>>();
 
-            if (enemyFighters.Any() && targets[0].Type != enemyFighters[0].Type) dangers.Add(enemyFighters);
-            if (enemyIfvs.Any() && targets[0].Type != enemyIfvs[0].Type) dangers.Add(enemyIfvs);
+            //if (enemyFighters.Any() && targets[0].Type != enemyFighters[0].Type) dangers.Add(enemyFighters);
+            if (enemyIfvs.Any()) dangers.Add(enemyIfvs);
 
             // Атаковать можно, если мы прилетим к цели быстрее + у нас будет время на уничтожение целей
             // Пока не учитываем тип местрости и погоду
@@ -83,8 +77,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
             if (safety) // Можем атаковать
             {
+                var offset = targetPosition - myCenter;
+
+                offset -= offset.Normalized * myFighters[0].Vehicle.AerialAttackRange;
+
                 SelectGroup();
-                Actions.Move(targetPosition - myCenter);
+                Actions.Move(offset);
 
                 return true;
             }

@@ -40,5 +40,30 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         {
             return new Position(a.X - b.X, a.Y - b.Y);
         }
+
+        public static Position operator *(Position a, double b)
+        {
+            return new Position(a.X + b, a.Y + b);
+        }
+
+        public static Position operator *(double a, Position b)
+        {
+            return b * a;
+        }
+
+        public double Magnitude
+        {
+            get { return Distance(new Position(0, 0)); }
+        }
+
+        public Position Normalized
+        {
+            get
+            {
+                var magnitude = Magnitude;
+
+                return new Position(X / magnitude, Y / magnitude);
+            }
+        }
     }
 }

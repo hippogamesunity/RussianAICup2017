@@ -50,7 +50,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                     return true;
                 case 2:
                     SelectGroup();
-                    Actions.Scale(0.5, Helpers.GetCenter(units));
+                    Actions.Scale(0.1, Helpers.GetCenter(units));
                     return true;
                 default:
                     return false;
