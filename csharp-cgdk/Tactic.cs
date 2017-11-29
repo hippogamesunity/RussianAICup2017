@@ -23,7 +23,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		public static Formation Ifvs = new Formation(VehicleType.Ifv);
 		public static Formation Tanks = new Formation(VehicleType.Tank);
 
+		public static Formation[] TanksGroup = new Formation[5];
+		public static Formation[] IfvsGroup = new Formation[5];
+		public static Formation[] ArrvsGroup = new Formation[5];
+
 		public static int FormationsReady = 0;
+		public static double FormationsAngle = 0 - Math.PI * 0.5;
 
         /// <summary>
         /// 
@@ -43,6 +48,47 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             }
         }
 
+		public static void CreateFormations()
+		{
+			AllMyUnits.Update();
+			Fighters.Update();
+			Helicopters.Update();
+			Arrvs.Update();
+			Ifvs.Update();
+			Tanks.Update();
+
+			int groupIndex = 1;
+			var selectRect = new Rect();
+
+			selectRect.LeftTop.X = Tanks.Rectangle.LeftTop.X;
+			selectRect.RightBottom.X = Tanks.Rectangle.RightBottom.X;
+			for (int i = 0; i < 5; i++)
+			{
+				selectRect.LeftTop.Y = Tanks.Rectangle.LeftTop.Y + i * 11;
+				selectRect.RightBottom.Y = selectRect.LeftTop.Y + 11;
+				Tactic.TanksGroup[i] = new Formation(selectRect, groupIndex++);
+			}
+
+			selectRect.LeftTop.X = Ifvs.Rectangle.LeftTop.X;
+			selectRect.RightBottom.X = Ifvs.Rectangle.RightBottom.X;
+			for (int i = 0; i < 5; i++)
+			{
+				selectRect.LeftTop.Y = Ifvs.Rectangle.LeftTop.Y + i * 11;
+				selectRect.RightBottom.Y = selectRect.LeftTop.Y + 11;
+				Tactic.IfvsGroup[i] = new Formation(selectRect, groupIndex++);
+			}
+
+			selectRect.LeftTop.X = Arrvs.Rectangle.LeftTop.X;
+			selectRect.RightBottom.X = Arrvs.Rectangle.RightBottom.X;
+			for (int i = 0; i < 5; i++)
+			{
+				selectRect.LeftTop.Y = Arrvs.Rectangle.LeftTop.Y + i * 11;
+				selectRect.RightBottom.Y = selectRect.LeftTop.Y + 11;
+				Tactic.ArrvsGroup[i] = new Formation(selectRect, groupIndex++);
+			}
+
+		}
+
 		public static void UpdateFormations()
 		{
 			AllMyUnits.Update();
@@ -51,6 +97,13 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			Arrvs.Update();
 			Ifvs.Update();
 			Tanks.Update();
+
+			for (int i = 0; i < 5; i++)
+			{
+				TanksGroup[i].Update();
+				IfvsGroup[i].Update();
+				ArrvsGroup[i].Update();
+			}
 		}
 
 		/// <summary>
@@ -61,7 +114,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// <param name="me"></param>
 		/// <param name="self"></param>
 		/// <param name="maxSpeed"></param>
-		public static void CommonAttack( Formation formation, List<VehicleType> targetTypes, bool self = false, double maxSpeed = 0)
+		public static void CommonAttack(Formation formation, List<VehicleType> targetTypes, bool self = false, double maxSpeed = 0)
 		{
 			var move = new Action();
 
@@ -166,11 +219,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 
 		public static Point LastHurricaneCenter = new Point(0, 0);
 
-		static VehicleWrapper GetNearestEnemy(Point hurricanecenter, Player me)
+		static VehicleWrapper GetNearestEnemy(Point hurricanecenter)
 		{
 			VehicleWrapper result = null;
 			double d = Double.MaxValue;
-			var units = Global.Units.Values.Where(i => i.PlayerId != me.Id).ToList();
+			var units = Global.Units.Values.Where(i => i.PlayerId != Global.Me.Id).ToList();
 			if (units.Count > 0)
 			{
 				foreach (var unit in units)
@@ -214,7 +267,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 			{
 				if (!formationMoved && formationMoveFreeze == 0)
 				{
-					var unit = GetNearestEnemy(hurricaneCenter, Global.Me);
+					var unit = GetNearestEnemy(hurricaneCenter);
 					if (unit != null)
 					{
 						var unitDistance = hurricaneCenter.Distance(unit);
@@ -264,6 +317,42 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 				else if (AntiNuke.Tick + 20 == Global.World.TickIndex)
 				{
 					AllMyUnits.UrgentScale(0.2, AntiNuke.NukePoint.X, AntiNuke.NukePoint.Y);
+				}
+			}
+		}
+
+		#endregion
+
+		#region LINE STRIKE
+
+		public static void LineStrike()
+		{
+			if (!AllMyUnits.HasOrders() && !AllMyUnits.Busy)
+			{
+				var enemy = GetNearestEnemy(AllMyUnits.MassCenter);
+
+				if (enemy != null)
+				{
+					var unitDistance = AllMyUnits.MassCenter.Distance(enemy);
+					var unitAngle = Math.Asin((AllMyUnits.MassCenter.Y - enemy.Y) / unitDistance );
+					if (AllMyUnits.MassCenter.X > enemy.X)
+						unitAngle = Math.PI - unitAngle;
+					var unitDistKoeff = (unitDistance<90 ? unitDistance-30 : 50);
+					var unitDist = new Point(Math.Cos(unitAngle) * unitDistKoeff, Math.Sin(unitAngle) * unitDistKoeff);
+
+					if (unitAngle != FormationsAngle)
+					{
+						AllMyUnits.Rotate(unitAngle - FormationsAngle);
+						FormationsAngle = unitAngle;
+					}
+					if (unitDistance < 40)
+					{
+						
+					}
+					else
+					{						
+						AllMyUnits.MoveTo(AllMyUnits.MassCenter.X + unitDist.X, AllMyUnits.MassCenter.Y - unitDist.Y); 
+					}
 				}
 			}
 		}

@@ -112,6 +112,17 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         }
 
 		/// <summary>
+		/// Создание группы на основе типа юнитов
+		/// </summary>
+		/// <param name="type"></param>
+		public Formation( Rect rectangle, int groupIndex )
+		{
+			GroupIndex = groupIndex;
+			Command.Select(rectangle);
+			Command.Group(GroupIndex);
+		}
+
+		/// <summary>
         /// Создание группы на основе типа юнитов
         /// </summary>
         /// <param name="type"></param>
@@ -126,8 +137,10 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         {
 			if ( GroupIndex == -1 )
 				Units = Global.MyUnits;
-			else
+			else if ( GroupIndex == 0 )
 				Units = Global.Units.Values.Where(j => j.Type == Type && j.PlayerId == Global.Me.Id).ToList();
+			else
+				Units = Global.Units.Values.Where(j => j.Groups.Contains(GroupIndex) && j.PlayerId == Global.Me.Id).ToList();
             Rectangle = new Rect(Units);
 			if (Units.Count > 0)
 				MassCenter = new Point(Units.Average(i => i.X), Units.Average(i => i.Y));
@@ -163,6 +176,15 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		public void UrgentScale(double value, double X, double Y)
 		{
 			Command.Scale(value, X, Y, this, 0, true);
+		}
+
+		/// <summary>
+		/// Поворот группы
+		/// </summary>
+		/// <param name="value"></param>
+		public void Rotate(double value, int WaitDuringTicks = 30000)
+		{
+			Command.RotateRelative(value, this, WaitDuringTicks);
 		}
 
 		/// <summary>

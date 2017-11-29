@@ -85,7 +85,9 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             }
 
 			MyUnits = Units.Values.Where(i => i.PlayerId == Me.Id).ToList();
-			
+
+			if (World.TickIndex == 0)
+				Tactic.CreateFormations();
 			Tactic.UpdateFormations();
         }
     }
@@ -190,6 +192,11 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// </summary>
         public Point Direction;
 
+		/// <summary>
+		/// Группы куда входит юнит
+		/// </summary>
+		public int[] Groups = new int[0];
+
         /// <summary>
         /// 
         /// </summary>
@@ -208,10 +215,12 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             Type = vehicle.Type;
             X = vehicle.X;
             Y = vehicle.Y;
+			Position.X = X;
+			Position.Y = Y;
             Durability = vehicle.Durability;
             PlayerId = vehicle.PlayerId;
             Vehicle = vehicle;
-			Direction = Point.Zero;
+			Direction = Point.Zero;			
         }
 
         /// <summary>
@@ -228,6 +237,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             TerrainType = Global.World.TerrainByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)];
             WeatherType = Global.World.WeatherByCellXY[(int) Math.Floor(X / 32)][(int) Math.Floor(Y / 32)];
             Durability = vehicleUpdate.Durability;
+			Groups = vehicleUpdate.Groups;
         }
 
         public double Distance(VehicleWrapper target)

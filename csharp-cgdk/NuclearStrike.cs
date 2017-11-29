@@ -40,7 +40,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
                 if (evaluations.Count == 0) return;
 
                 var best = evaluations.OrderBy(i => i.Value).Last();
-                var threshold = Math.Min(50 * 100, 0.20 * enemyUnits.Sum(i => i.Durability));
+                var threshold = Math.Min(30 * 100, 0.20 * enemyUnits.Sum(i => i.Durability));
 
                 if (best.Value > threshold)
                 {

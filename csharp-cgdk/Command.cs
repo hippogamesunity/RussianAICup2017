@@ -32,6 +32,15 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
             Global.ActionQueue.Add(new Action { Action = ActionType.ClearAndSelect, Right = Global.World.Width, Bottom = Global.World.Height });
         }
 
+		/// <summary>
+		/// Выделить объекты
+		/// </summary>
+		/// <param name="world"></param>
+		public static void Select( Rect rect )
+		{
+			Global.ActionQueue.Add(new Action { Action = ActionType.ClearAndSelect, Left = rect.LeftTop.X, Right = rect.RightBottom.X, Top = rect.LeftTop.Y, Bottom = rect.RightBottom.Y });
+		}
+
         #endregion
 
         #region GROUP
@@ -89,7 +98,7 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// <param name="angle"></param>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
-		private static void Rotate(double angle, double x, double y)
+		public static void Rotate(double angle, double x, double y)
 		{
 			Global.ActionQueue.Add(new Action { Action = ActionType.Rotate, Angle = angle, X = x, Y = y, MaxSpeed = 1, MaxAngularSpeed = 1 });
 		}
@@ -100,9 +109,20 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 		/// <param name="angle"></param>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
-		private static void Rotate(double angle, Point position)
+		public static void Rotate(double angle, Point position)
 		{
 			Rotate(angle, position.X, position.Y);
+		}
+
+		/// <summary>
+		/// Поворот вокруг точки на заданный угол
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		public static void RotateRelative(double angle, Formation formation = null, int waitDuringTicks = 0)
+		{
+			Global.ActionQueue.Add(new Action { Action = ActionType.Rotate, Angle = angle, MaxSpeed = 1, MaxAngularSpeed = 1, Relative = true, Formation = formation, WaitDuringTicks = waitDuringTicks });
 		}
 
 		#endregion

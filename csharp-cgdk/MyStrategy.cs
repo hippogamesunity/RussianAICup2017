@@ -18,30 +18,23 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
         /// <param name="move"></param>
         public void Move(Player me, World world, Game game, Move move)
         {
-            Global.Update( me, world, game, move );
+            Global.Update( me, world, game, move );		
 
 			if ( world.TickIndex == 0 )
 				CreateFormations();
-			else
-				MergeFormations();
-
-			if (Tactic.FormationsReady > 0 && world.TickIndex > Tactic.FormationsReady)
+			else if ( world.TickIndex > 800 && Tactic.FormationsReady == 0 )
+				MergeFormations2();
+			if (Tactic.FormationsReady > 0 && world.TickIndex == Tactic.FormationsReady)
 			{
-
-				if (world.TickIndex < 0.75 * world.TickCount && !Tactic.EnemyIsWeaker)
-				{
-					Tactic.Hurricane();
-				}
-				else
-				{
-					Tactic.Rush(expand: true);
-				}
+			}
+			if (Tactic.FormationsReady > 0 && world.TickIndex > Tactic.FormationsReady )
+			{
+				if ( Tactic.AntiNuke == null )
+					Tactic.LineStrike();				
 				Tactic.AntiNuclearStrike();
 			}			
             NuclearStrike();
-            Global.ActionQueue.Process();
+			Global.ActionQueue.Process();
         }
-        
-        
     }
 }

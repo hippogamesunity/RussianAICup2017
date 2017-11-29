@@ -113,6 +113,8 @@ namespace Com.CodeGame.CodeWars2017.DevKit.CSharpCgdk
 					}
 				}
 				move.Angle = action.Angle;
+				move.Left = action.Left;
+				move.Top = action.Top;
 				move.Right = action.Right;
 				move.Bottom = action.Bottom;
 				move.VehicleId = action.VehicleId;
